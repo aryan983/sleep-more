@@ -1,4 +1,4 @@
-const CACHE = 'sleep-more-v1';
+const CACHE = 'sleep-more-v3';
 const PRECACHE = ['/index.html', '/manifest.json'];
 
 self.addEventListener('install', e => {
