@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Wake Up</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e; --surface: #161616; --border: #2a2a2a;
+    --text: #e8e4dc; --muted: #555; --accent: #c8f060;
+    --warn: #f0a040; --danger: #f06060; --good: #60d4a0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'DM Mono', monospace;
+    padding: 14px 14px 12px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+
+  /* Header */
+  .header { display: flex; align-items: flex-start; justify-content: space-between; }
+  .header h1 { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 300; line-height: 1.3; }
+  .header h1 span { color: var(--accent); font-style: italic; }
+  .header-right { text-align: right; }
+  #clock { font-family: 'Fraunces', serif; font-size: 2.6rem; font-weight: 300; color: var(--text); line-height: 1; letter-spacing: -0.03em; }
+  .header-sub { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.06em; margin-top: 3px; }
+
+  /* Config */
+  .config-row { display: flex; gap: 6px; }
+  .config-block { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 7px 10px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
+  .cfg-label { font-size: 0.54rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; }
+  .toggle-name { font-size: 0.7rem; }
+  .toggle-mins { font-size: 0.58rem; color: var(--muted); }
+  .switch { position: relative; width: 32px; height: 17px; cursor: pointer; flex-shrink: 0; }
+  .switch input { display: none; }
+  .slider { position: absolute; inset: 0; background: #222; border-radius: 2px; transition: 0.15s; }
+  .slider:before { content: ''; position: absolute; width: 11px; height: 11px; left: 3px; top: 3px; background: var(--muted); border-radius: 1px; transition: 0.15s; }
+  input:checked + .slider { background: rgba(200,240,96,0.12); }
+  input:checked + .slider:before { transform: translateX(15px); background: var(--accent); }
+  .num-row { display: flex; align-items: center; justify-content: space-between; }
+  .num-name { font-size: 0.7rem; }
+  .num-ctrl { display: flex; align-items: center; gap: 4px; }
+  .num-input { background: #1a1a1a; border: 1px solid var(--border); color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.72rem; padding: 2px 0; border-radius: 2px; width: 36px; text-align: center; outline: none; }
+  .num-input:focus { border-color: var(--accent); }
+  .num-unit { font-size: 0.58rem; color: var(--muted); }
+
+  /* Refresh row */
+  .refresh-row { display: flex; justify-content: space-between; align-items: center; }
+  .section-label { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .refresh-btn { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; background: none; border: 1px solid var(--border); color: var(--muted); padding: 5px 9px; border-radius: 2px; cursor: pointer; transition: all 0.15s; }
+  .refresh-btn:hover, .refresh-btn.loading { border-color: var(--accent); color: var(--accent); }
+  .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-right: 5px; animation: pulse 2s ease-in-out infinite; vertical-align: middle; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* Bus grid */
+  .bus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+  .bus-item { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 10px 6px 9px; cursor: pointer; transition: border-color 0.15s; text-align: center; }
+  .bus-item:hover { border-color: #444; }
+  .bus-item.selected { border-color: var(--accent); background: rgba(200,240,96,0.04); }
+  .bus-time { font-size: 1.15rem; font-weight: 500; letter-spacing: -0.02em; }
+  .bus-sub { font-size: 0.58rem; color: var(--muted); margin-top: 2px; }
+  .bus-train { font-size: 0.62rem; color: var(--accent); margin-top: 4px; opacity: 0.9; letter-spacing: 0.01em; }
+  .badge { font-size: 0.52rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 5px; border-radius: 2px; display: inline-block; margin-top: 5px; }
+  .badge-good  { color: var(--good);   background: rgba(96,212,160,0.1); }
+  .badge-tight { color: var(--warn);   background: rgba(240,160,64,0.1); }
+  .badge-miss  { color: var(--danger); background: rgba(240,96,96,0.1); }
+  .loading-msg { text-align: center; padding: 14px; color: var(--muted); font-size: 0.7rem; }
+  .spinner { display: inline-block; width: 10px; height: 10px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 5px; vertical-align: middle; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Result panel */
+  .result-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 12px 14px; }
+  .result-panel.active { border-color: var(--accent); }
+  .result-empty { font-size: 0.65rem; color: var(--muted); text-align: center; padding: 6px 0; }
+
+  /* Hero */
+  .result-hero { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 12px; }
+  .result-lbl { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+  .result-big { font-family: 'Fraunces', serif; font-size: 2.8rem; font-weight: 700; color: var(--accent); line-height: 1; }
+  .verdict { font-size: 0.9rem; font-weight: 500; text-align: right; padding-bottom: 4px; line-height: 1.3; }
+  .verdict.slack-good  { color: var(--good); }
+  .verdict.slack-tight { color: var(--warn); }
+  .verdict.slack-miss  { color: var(--danger); }
+
+  /* Step chain */
+  .steps { border-top: 1px solid var(--border); padding-top: 8px; display: flex; flex-direction: column; }
+  .step { display: flex; align-items: baseline; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #1c1c1c; gap: 10px; }
+  .step:last-child { border-bottom: none; }
+  .step-label { font-size: 0.68rem; color: var(--muted); flex-shrink: 0; }
+  .step-label em { color: var(--text); font-style: normal; }
+  .step-val { font-size: 0.88rem; color: var(--text); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+  .step-val.hi  { color: var(--accent); font-size: 1rem; font-weight: 500; }
+  .step-val.dim { color: var(--muted); font-size: 0.72rem; }
+  .step-divider { height: 1px; background: var(--border); margin: 3px 0; }
+
+  /* Shower suggestion */
+  .suggestion { margin-top: 10px; border: 1px solid rgba(240,160,64,0.35); border-radius: 2px; padding: 8px 11px; background: rgba(240,160,64,0.05); display: flex; align-items: flex-start; gap: 8px; }
+  .suggestion-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .suggestion-body { flex: 1; }
+  .suggestion-title { font-size: 0.72rem; color: var(--warn); font-weight: 500; }
+  .suggestion-detail { font-size: 0.64rem; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+  .suggestion-detail strong { color: var(--text); }
+  .suggestion.is-ok { border-color: rgba(96,212,160,0.3); background: rgba(96,212,160,0.04); }
+  .suggestion.is-ok .suggestion-title { color: var(--good); }
+
+  /* Tracking status indicator — 3 states */
+  .bus-status { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 4px; font-size: 0.57rem; letter-spacing: 0.07em; text-transform: uppercase; }
+  .bus-status.is-full    { color: var(--good); }
+  .bus-status.is-partial { color: var(--warn); }
+  .bus-status.is-sched   { color: var(--muted); }
+  .bus-item.is-sched-card { opacity: 0.55; }
+  .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .is-full    .live-dot { background: var(--good); animation: liveblink 1.4s ease-in-out infinite; }
+  .is-partial .live-dot { background: var(--warn); animation: liveblink 2s ease-in-out infinite; }
+  .is-sched   .live-dot { background: var(--muted); }
+  @keyframes liveblink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.25;transform:scale(0.7)} }
+</style>
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Sleep More">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="theme-color" content="#0e0e0e">
+</head>
+<body>
+
+  <div class="header">
+    <h1>can i <span>sleep more?</span></h1>
+    <div class="header-right">
+      <div id="clock">--:--:--</div>
+      <div class="header-sub">186 · Whitchurch Lane → H&amp;W</div>
+    </div>
+  </div>
+
+  <div class="config-row">
+    <div class="config-block">
+      <div class="cfg-label">still need to</div>
+      <div class="toggle-row">
+        <div><div class="toggle-name">Shower</div><div class="toggle-mins">+15 min</div></div>
+        <label class="switch"><input type="checkbox" id="shower" checked><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div><div class="toggle-name">Trim</div><div class="toggle-mins">+5 min</div></div>
+        <label class="switch"><input type="checkbox" id="trim"><span class="slider"></span></label>
+      </div>
+    </div>
+    <div class="config-block">
+      <div class="cfg-label">adjust</div>
+      <div class="num-row">
+        <div class="num-name">💩 Poop</div>
+        <div class="num-ctrl"><input type="number" class="num-input" id="poopMins" value="6" min="1" max="30"><span class="num-unit">min</span></div>
+      </div>
+      <div class="num-row">
+        <div class="num-name">🚶 Walk</div>
+        <div class="num-ctrl"><input type="number" class="num-input" id="walkMins" value="4" min="1" max="20"><span class="num-unit">min</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="refresh-row">
+    <div class="section-label"><span class="dot"></span>next 186s at stop R</div>
+    <button class="refresh-btn" id="refreshBtn" onclick="loadBuses()">↻ refresh</button>
+  </div>
+
+  <div class="bus-grid" id="busList">
+    <div class="loading-msg" style="grid-column:1/-1"><span class="spinner"></span>fetching...</div>
+  </div>
+
+  <div class="result-panel" id="resultPanel">
+    <div class="result-empty">tap a bus to see if you can sleep in</div>
+  </div>
+
+<script>
+const API_KEY  = '965df0fd29114427b78c98d0fb844f84';
+const STOP_R   = '490006427R';
+const STOP_HW  = '490015249M';
+const BUFFER   = 3;
+const POST_SHW = 3, PACK = 3;
+const TRAIN_MIN = [21, 51];
+const FALLBACK_JOURNEY = 18;
+
+// Full timetable from TFL API — weekday (non-schooldays), Saturday, Sunday
+const TT = {
+  weekday: [
+    [5,26],[5,46],[6,7],[6,30],[6,45],[7,4],[7,16],[7,28],[7,40],[7,52],
+    [8,4],[8,16],[8,28],[8,40],[8,52],[9,4],[9,16],[9,28],[9,40],[9,52],
+    [10,4],[10,16],[10,28],[10,40],[10,52],[11,5],[11,17],[11,29],[11,41],[11,54],
+    [12,6],[12,19],[12,31],[12,43],[12,55],[13,7],[13,19],[13,31],[13,44],[13,56],
+    [14,8],[14,21],[14,34],[14,47],[14,59],[15,11],[15,23],[15,35],[15,47],[15,59],
+    [16,11],[16,23],[16,35],[16,48],[17,0],[17,12],[17,25],[17,37],[17,50],
+    [18,3],[18,16],[18,29],[18,42],[18,54],[19,7],[19,18],[19,29],[19,40],[19,51],
+    [20,1],[20,13],[20,24],[20,36],[20,51],[21,5],[21,20],[21,34],[21,49],
+    [22,3],[22,18],[22,31],[22,45],[22,59],[23,12],[23,27],[23,42],[23,56]
+  ],
+  saturday: [
+    [5,25],[5,45],[6,5],[6,27],[6,47],[7,7],[7,30],[7,47],[8,2],[8,17],[8,32],[8,43],[8,54],
+    [9,6],[9,18],[9,30],[9,42],[9,54],[10,5],[10,17],[10,28],[10,40],[10,52],
+    [11,3],[11,16],[11,29],[11,41],[11,53],[12,6],[12,18],[12,31],[12,43],[12,55],
+    [13,7],[13,19],[13,31],[13,44],[13,56],[14,8],[14,20],[14,32],[14,44],[14,56],
+    [15,8],[15,20],[15,31],[15,43],[15,55],[16,7],[16,19],[16,31],[16,43],[16,55],
+    [17,7],[17,18],[17,30],[17,42],[17,54],[18,6],[18,18],[18,30],[18,42],[18,54],
+    [19,9],[19,24],[19,39],[19,53],[20,7],[20,21],[20,36],[20,51],
+    [21,6],[21,20],[21,34],[21,49],[22,4],[22,18],[22,31],[22,46],[22,59],
+    [23,13],[23,28],[23,42],[23,57]
+  ],
+  sunday: [
+    [5,25],[5,45],[6,5],[6,25],[6,46],[7,6],[7,26],[7,47],[8,8],[8,29],[8,50],
+    [9,12],[9,33],[9,48],[10,3],[10,17],[10,33],[10,48],[11,2],[11,17],[11,32],[11,47],
+    [12,3],[12,18],[12,33],[12,49],[13,4],[13,19],[13,34],[13,49],
+    [14,4],[14,19],[14,34],[14,49],[15,4],[15,19],[15,34],[15,49],
+    [16,3],[16,17],[16,32],[16,47],[17,2],[17,17],[17,32],[17,47],
+    [18,2],[18,16],[18,31],[18,46],[19,1],[19,16],[19,31],[19,46],
+    [20,0],[20,15],[20,30],[20,45],[21,1],[21,17],[21,31],[21,46],
+    [22,0],[22,14],[22,29],[22,43],[22,58],[23,12],[23,27],[23,42],[23,56]
+  ]
+};
+
+function getTodayTimetable() {
+  const d = new Date().getDay();
+  if (d === 0) return TT.sunday;
+  if (d === 6) return TT.saturday;
+  return TT.weekday;
+}
+
+function pad(n) { return String(n).padStart(2,'0'); }
+function fmt(t) { return `${pad(Math.floor(t/60)%24)}:${pad(Math.floor(t%60))}`; }
+function nowMins() { const n=new Date(); return n.getHours()*60+n.getMinutes()+n.getSeconds()/60; }
+function tfl(p) { return `https://api.tfl.gov.uk${p}${p.includes('?')?'&':'?'}app_key=${API_KEY}`; }
+
+function nextTrain(afterMins) {
+  for (let h=Math.floor(afterMins/60); h<=Math.floor(afterMins/60)+3; h++) {
+    for (const m of TRAIN_MIN) {
+      const t=h*60+m; if(t>=afterMins) return t;
+    }
+  }
+  return null;
+}
+
+// Merge live buses with timetable, return unified bus list with tracking state
+// tracking: 'full' | 'partial' | 'scheduled'
+function mergeBuses(liveR, hwVehicles, nm) {
+  const MATCH_WINDOW = 3; // mins — live bus matches a timetable slot if within this
+  const LOOKAHEAD    = 90; // mins ahead to show timetable slots
+
+  // Build live entries
+  const liveEntries = liveR.map(bus => {
+    const depMins = nm + bus.timeToStation / 60;
+    const hwTTS   = hwVehicles[bus.vehicleId];
+    let tracking, jMins;
+    if (hwTTS != null) {
+      const diff = (hwTTS - bus.timeToStation) / 60;
+      if (diff > 5 && diff < 60) {
+        tracking = 'full'; jMins = Math.round(diff);
+      } else {
+        tracking = 'partial'; jMins = FALLBACK_JOURNEY;
+      }
+    } else {
+      tracking = 'partial'; jMins = FALLBACK_JOURNEY;
+    }
+    return { depMins, jMins, tracking, live: true, bus };
+  });
+
+  // Find timetable slots not covered by a live entry
+  const tt = getTodayTimetable();
+  const schedEntries = [];
+  for (const [h, m] of tt) {
+    const slotMins = h * 60 + m;
+    if (slotMins < nm - 1) continue;           // already passed
+    if (slotMins > nm + LOOKAHEAD) break;       // too far ahead
+    // Check if any live bus is within MATCH_WINDOW of this slot
+    const matched = liveEntries.some(e => Math.abs(e.depMins - slotMins) <= MATCH_WINDOW);
+    if (!matched) {
+      schedEntries.push({
+        depMins: slotMins,
+        jMins: FALLBACK_JOURNEY,
+        tracking: 'scheduled',
+        live: false,
+        bus: null
+      });
+    }
+  }
+
+  // Merge and sort by departure
+  return [...liveEntries, ...schedEntries].sort((a, b) => a.depMins - b.depMins);
+}
+
+let liveR      = [];
+let hwVehicles = {};
+let mergedBuses = [];
+let selectedIdx = null;
+
+async function loadBuses() {
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('loading');
+  document.getElementById('busList').innerHTML =
+    '<div class="loading-msg" style="grid-column:1/-1"><span class="spinner"></span>fetching live data...</div>';
+  selectedIdx = null; renderResult();
+
+  try {
+    const [resR, resHW] = await Promise.all([
+      fetch(tfl(`/StopPoint/${STOP_R}/Arrivals`)),
+      fetch(tfl(`/StopPoint/${STOP_HW}/Arrivals`))
+    ]);
+    if (!resR.ok) throw new Error(`Stop R: HTTP ${resR.status}`);
+    if (!resHW.ok) throw new Error(`H&W: HTTP ${resHW.status}`);
+    const [dataR, dataHW] = await Promise.all([resR.json(), resHW.json()]);
+
+    liveR = dataR
+      .filter(a => String(a.lineId)==='186' || String(a.lineName)==='186')
+      .sort((a,b) => a.timeToStation - b.timeToStation);
+
+    hwVehicles = {};
+    dataHW
+      .filter(a => String(a.lineId)==='186' || String(a.lineName)==='186')
+      .forEach(a => { hwVehicles[a.vehicleId] = a.timeToStation; });
+
+    mergedBuses = mergeBuses(liveR, hwVehicles, nowMins());
+    renderBuses();
+  } catch(e) {
+    document.getElementById('busList').innerHTML =
+      `<div class="loading-msg" style="grid-column:1/-1;color:var(--danger)">⚠ ${e.message}</div>`;
+  } finally {
+    btn.classList.remove('loading');
+  }
+}
+
+function renderBuses() {
+  const nm   = nowMins();
+  // Re-merge on each render so times stay fresh
+  mergedBuses = mergeBuses(liveR, hwVehicles, nm);
+
+  const list = document.getElementById('busList');
+  if (!mergedBuses.length) {
+    list.innerHTML = '<div class="loading-msg" style="grid-column:1/-1">no 186 buses right now</div>';
+    return;
+  }
+  const walk = parseInt(document.getElementById('walkMins').value)||4;
+
+  const statusMeta = {
+    full:      { cls: 'is-full',    label: 'full track' },
+    partial:   { cls: 'is-partial', label: 'partial' },
+    scheduled: { cls: 'is-sched',   label: 'scheduled' }
+  };
+
+  list.innerHTML = mergedBuses.map((entry, i) => {
+    const { depMins, jMins, tracking } = entry;
+    const minsAway = Math.round(depMins - nm);
+    const canCatch = minsAway >= walk;
+    const tight    = canCatch && (minsAway - walk) < 3;
+    const badgeCls = !canCatch ? 'badge-miss' : tight ? 'badge-tight' : 'badge-good';
+    const badgeLbl = !canCatch ? 'too soon'   : tight ? 'tight'       : 'ok';
+    const arrHW    = depMins + jMins;
+    const train    = nextTrain(arrHW + BUFFER);
+    const trainLabel = train ? `🚆 ${fmt(train)}` : '🚆 —';
+    const rideLabel  = tracking === 'full' ? `${jMins} min ride` : `~${jMins} min ride`;
+    const { cls: stCls, label: stLbl } = statusMeta[tracking];
+    const cardDim  = tracking === 'scheduled' ? 'is-sched-card' : '';
+    const sel      = selectedIdx === i ? 'selected' : '';
+
+    return `<div class="bus-item ${sel} ${cardDim}" onclick="selectBus(${i})">
+      <div class="bus-status ${stCls}"><span class="live-dot"></span>${stLbl}</div>
+      <div class="bus-time">${fmt(depMins)}</div>
+      <div class="bus-sub">in ${minsAway} min</div>
+      <div class="bus-sub">${rideLabel}</div>
+      <div class="bus-train">${trainLabel}</div>
+      <div class="badge ${badgeCls}">${badgeLbl}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectBus(i) { selectedIdx=i; renderBuses(); renderResult(); }
+
+function renderResult() {
+  const panel = document.getElementById('resultPanel');
+  if (selectedIdx === null) {
+    panel.className = 'result-panel';
+    panel.innerHTML = '<div class="result-empty">tap a bus to see if you can sleep in</div>';
+    return;
+  }
+
+  const nm    = nowMins();
+  const entry = mergedBuses[selectedIdx];
+  if (!entry) { selectedIdx=null; renderResult(); return; }
+
+  const { depMins, jMins, tracking } = entry;
+  const shower = document.getElementById('shower').checked;
+  const trim   = document.getElementById('trim').checked;
+  const poop   = parseInt(document.getElementById('poopMins').value)||6;
+  const walk   = parseInt(document.getElementById('walkMins').value)||4;
+
+  const busDepMins = depMins - nm;
+  const arrHW      = depMins + jMins;
+  const train      = nextTrain(arrHW + BUFFER);
+
+  if (!train) {
+    panel.className = 'result-panel';
+    panel.innerHTML = '<div class="result-empty" style="color:var(--danger)">no train found</div>';
+    return;
+  }
+
+  const showerMins = shower ? 15 : 0;
+  const trimMins   = trim   ?  5 : 0;
+  const prepTotal  = showerMins + trimMins + POST_SHW + poop + PACK;
+  const leaveAt    = depMins - walk;
+  const startPrepBy = leaveAt - prepTotal;
+  const slack      = Math.floor(startPrepBy - nm);
+
+  const slackCls = slack < 0 ? 'slack-miss' : slack < 5 ? 'slack-tight' : 'slack-good';
+  const slackLbl = slack < 0
+    ? `${Math.abs(slack)} min late — get up now!`
+    : slack === 0 ? `get up now` : `${slack} min to spare`;
+
+  const prepLines = [];
+  if (showerMins) prepLines.push(`shower +${showerMins}`);
+  if (trimMins)   prepLines.push(`trim +${trimMins}`);
+  prepLines.push(`dressed +${POST_SHW}`, `poop +${poop}`, `pack +${PACK}`);
+
+  const rideColors = { full: 'var(--good)', partial: 'var(--warn)', scheduled: 'var(--muted)' };
+  const rideLabels = { full: 'live', partial: 'partial', scheduled: 'sched' };
+  const rideNote = `${tracking === 'full' ? jMins : '~'+jMins} min <span style="color:${rideColors[tracking]};font-size:0.65rem">${rideLabels[tracking]}</span>`;
+
+  // --- Shower suggestion logic ---
+  let suggestionHtml = '';
+  if (document.getElementById('shower').checked) {
+    // Try progressively shorter showers: 10, 5, skip entirely
+    const suggestions = [
+      { label: '10 min quicker shower', saving: 10 },
+      { label: '5 min quicker shower',  saving: 5  },
+      { label: 'skipping shower',       saving: 15 }
+    ];
+    // Only show suggestion if currently tight or late (slack < 8)
+    if (slack < 8) {
+      let found = null;
+      for (const s of suggestions) {
+        if (s.saving > showerMins) continue; // can't save more than shower duration
+        const newSlack = slack + s.saving;
+        if (newSlack >= 0 && !found) {
+          found = { ...s, newSlack };
+        }
+      }
+      if (found) {
+        const isOk = found.newSlack >= 5;
+        const cls  = isOk ? 'is-ok' : '';
+        const newWakeUp = fmt(startPrepBy + found.saving); // wake up later by saving mins
+        suggestionHtml = `<div class="suggestion ${cls}">
+          <div class="suggestion-icon">🚿</div>
+          <div class="suggestion-body">
+            <div class="suggestion-title">${found.newSlack >= 0 ? 'Try ' + found.label : ''} ${found.newSlack < 0 ? 'Still tight even skipping shower' : ''}</div>
+            <div class="suggestion-detail">
+              ${found.newSlack >= 0
+                ? `<strong>${found.label}</strong> → wake up at <strong>${newWakeUp}</strong> instead, giving you <strong>${found.newSlack} min</strong> to spare`
+                : `Even skipping the shower you'd be <strong>${Math.abs(found.newSlack)} min short</strong> — aim for the next bus`
+              }
+            </div>
+          </div>
+        </div>`;
+      } else if (slack < 0) {
+        // No shower trick can save this — suggest next bus
+        suggestionHtml = `<div class="suggestion">
+          <div class="suggestion-icon">⏭️</div>
+          <div class="suggestion-body">
+            <div class="suggestion-title">Too late for this bus</div>
+            <div class="suggestion-detail">Even skipping the shower won't be enough — tap the next bus to see your options</div>
+          </div>
+        </div>`;
+      }
+    }
+  }
+
+  panel.className = 'result-panel active';
+  panel.innerHTML = `
+    <div class="result-hero">
+      <div>
+        <div class="result-lbl">wake up by</div>
+        <div class="result-big">${fmt(startPrepBy)}</div>
+      </div>
+      <div class="verdict ${slackCls}">${slackLbl}</div>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-label">⏰ wake up &amp; prep<br><em style="font-size:0.62rem;color:var(--muted)">${prepLines.join(' · ')}</em></div>
+        <div class="step-val dim">+${prepTotal} min</div>
+      </div>
+      <div class="step">
+        <div class="step-label">🚶 leave home</div>
+        <div class="step-val hi">${fmt(leaveAt)}</div>
+      </div>
+      <div class="step">
+        <div class="step-label">🚌 board 186 at stop R</div>
+        <div class="step-val">${fmt(depMins)} <span style="color:var(--muted);font-size:0.7rem">(in ${Math.round(busDepMins)} min)</span></div>
+      </div>
+      <div class="step">
+        <div class="step-label">📍 arrive H&amp;W</div>
+        <div class="step-val">${fmt(arrHW)} <span style="color:var(--muted);font-size:0.7rem">(+${rideNote})</span></div>
+      </div>
+      <div class="step-divider"></div>
+      <div class="step">
+        <div class="step-label">🚆 train</div>
+        <div class="step-val hi">${fmt(train)}</div>
+      </div>
+    </div>
+    ${suggestionHtml}`;
+}
+
+document.querySelectorAll('input').forEach(el => {
+  el.addEventListener('change', () => { renderBuses(); renderResult(); });
+  el.addEventListener('input',  () => renderResult());
+});
+
+loadBuses();
+setInterval(loadBuses, 60000);
+
+function updateClock() {
+  const n = new Date();
+  document.getElementById('clock').textContent =
+    pad(n.getHours())+':'+pad(n.getMinutes())+':'+pad(n.getSeconds());
+}
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW failed:', e));
+  });
+}
+</script>
+</body>
+</html>
