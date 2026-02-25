@@ -202,7 +202,6 @@ const DARWIN_TOKEN = '61dc1202-c81c-4766-92a9-ff422409042f';
 const DARWIN_URL   = `https://huxley2.azurewebsites.net/departures/hrw/to/mkc/10?accessToken=${DARWIN_TOKEN}`;
 const BUFFER   = 3;
 const POST_SHW = 3, PACK = 3;
-const TRAIN_MIN = [21, 51];
 const FALLBACK_JOURNEY = 18;
 
 // Live Darwin train departures HRW → MKC
@@ -270,11 +269,17 @@ function fmt12str(hhmm) {
 function nowMins() { const n=new Date(); return n.getHours()*60+n.getMinutes()+n.getSeconds()/60; }
 function tfl(p) { return `https://api.tfl.gov.uk${p}${p.includes('?')?'&':'?'}app_key=${API_KEY}`; }
 
+// Find next train departing after `afterMins` using live Darwin data.
+// Falls back to null if Darwin hasn't loaded yet.
 function nextTrain(afterMins) {
-  for (let h=Math.floor(afterMins/60); h<=Math.floor(afterMins/60)+3; h++) {
-    for (const m of TRAIN_MIN) {
-      const t=h*60+m; if(t>=afterMins) return t;
+  if (darwinTrains.length) {
+    for (const t of darwinTrains) {
+      if (!t.std) continue;
+      const [h, m] = t.std.split(':').map(Number);
+      const depMins = h * 60 + m;
+      if (depMins >= afterMins) return depMins;
     }
+    return null; // no more trains today in Darwin window
   }
   return null;
 }
@@ -477,7 +482,10 @@ function renderResult() {
 
   if (!train) {
     panel.className = 'result-panel';
-    panel.innerHTML = '<div class="result-empty" style="color:var(--danger)">no train found</div>';
+    const msg = darwinTrains.length === 0
+      ? 'loading train times…'
+      : 'no more trains today';
+    panel.innerHTML = `<div class="result-empty" style="color:var(--muted)">${msg}</div>`;
     return;
   }
 
