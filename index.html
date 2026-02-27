@@ -18,7 +18,6 @@
     padding: 14px 14px 12px;
     display: flex; flex-direction: column; gap: 8px;
   }
-
   /* Header */
   .header { display: flex; align-items: flex-start; justify-content: space-between; }
   .header h1 { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 300; line-height: 1.3; }
@@ -26,6 +25,26 @@
   .header-right { text-align: right; }
   #clock { font-family: 'Fraunces', serif; font-size: 2.6rem; font-weight: 300; color: var(--text); line-height: 1; letter-spacing: -0.03em; }
   .header-sub { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.06em; margin-top: 3px; }
+
+  /* Snooze hero */
+  .snooze-hero { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; transition: border-color 0.3s, background 0.3s; }
+  .snooze-hero.has-time { border-color: rgba(200,240,96,0.25); background: rgba(200,240,96,0.03); }
+  .snooze-hero.urgent { border-color: rgba(240,96,96,0.35); background: rgba(240,96,96,0.04); }
+  .snooze-left { display: flex; flex-direction: column; gap: 2px; }
+  .snooze-label { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .snooze-time { font-family: 'Fraunces', serif; font-size: 2.4rem; font-weight: 700; line-height: 1; color: var(--accent); transition: color 0.3s; }
+  .snooze-hero.urgent .snooze-time { color: var(--danger); }
+  .snooze-sub { font-size: 0.62rem; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+  .snooze-sub strong { color: var(--text); font-weight: 500; }
+  .snooze-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .snooze-alarm { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.05em; }
+  .snooze-alarm strong { color: var(--accent); font-weight: 500; font-size: 0.72rem; }
+  .snooze-hero.urgent .snooze-alarm strong { color: var(--danger); }
+  .snooze-verdict { font-size: 0.68rem; font-weight: 500; line-height: 1.3; }
+  .snooze-verdict.sv-good  { color: var(--good); }
+  .snooze-verdict.sv-tight { color: var(--warn); }
+  .snooze-verdict.sv-miss  { color: var(--danger); }
+  .snooze-empty { font-size: 0.62rem; color: var(--muted); text-align: center; padding: 4px 0; }
 
   /* Config */
   .config-row { display: flex; gap: 6px; }
@@ -50,16 +69,23 @@
   /* Refresh row */
   .refresh-row { display: flex; justify-content: space-between; align-items: center; }
   .section-label { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .refresh-right { display: flex; align-items: center; gap: 6px; }
   .refresh-btn { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; background: none; border: 1px solid var(--border); color: var(--muted); padding: 5px 9px; border-radius: 2px; cursor: pointer; transition: all 0.15s; }
   .refresh-btn:hover, .refresh-btn.loading { border-color: var(--accent); color: var(--accent); }
+  .sched-toggle { font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.06em; text-transform: uppercase; background: none; border: 1px solid var(--border); color: var(--muted); padding: 5px 8px; border-radius: 2px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+  .sched-toggle:hover { border-color: #444; color: var(--text); }
+  .sched-toggle.active { border-color: rgba(200,240,96,0.3); color: var(--accent); background: rgba(200,240,96,0.04); }
   .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-right: 5px; animation: pulse 2s ease-in-out infinite; vertical-align: middle; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
   /* Bus grid */
   .bus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-  .bus-item { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 10px 6px 9px; cursor: pointer; transition: border-color 0.15s; text-align: center; }
+  .bus-item { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 10px 6px 9px; cursor: pointer; transition: border-color 0.15s, opacity 0.2s; text-align: center; }
   .bus-item:hover { border-color: #444; }
   .bus-item.selected { border-color: var(--accent); background: rgba(200,240,96,0.04); }
+  .bus-item.is-sched-card { opacity: 0.45; border-style: dashed; }
+  .bus-item.is-sched-card:hover { opacity: 0.7; }
+  .bus-item.is-sched-card.selected { opacity: 0.8; }
   .bus-time { font-size: 1.15rem; font-weight: 500; letter-spacing: -0.02em; }
   .bus-sub { font-size: 0.58rem; color: var(--muted); margin-top: 2px; }
   .bus-train { font-size: 0.62rem; color: var(--accent); margin-top: 4px; opacity: 0.9; letter-spacing: 0.01em; }
@@ -70,13 +96,25 @@
   .loading-msg { text-align: center; padding: 14px; color: var(--muted); font-size: 0.7rem; }
   .spinner { display: inline-block; width: 10px; height: 10px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 5px; vertical-align: middle; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  .sched-divider { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+  .sched-divider-line { flex: 1; height: 1px; background: var(--border); }
+  .sched-divider-label { font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+
+  /* Bus tracking status */
+  .bus-status { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 4px; font-size: 0.57rem; letter-spacing: 0.07em; text-transform: uppercase; }
+  .bus-status.is-full    { color: var(--good); }
+  .bus-status.is-partial { color: var(--warn); }
+  .bus-status.is-sched   { color: var(--muted); }
+  .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .is-full    .live-dot { background: var(--good); animation: liveblink 1.4s ease-in-out infinite; }
+  .is-partial .live-dot { background: var(--warn); animation: liveblink 2s ease-in-out infinite; }
+  .is-sched   .live-dot { background: var(--muted); }
+  @keyframes liveblink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.25;transform:scale(0.7)} }
 
   /* Result panel */
   .result-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 12px 14px; }
   .result-panel.active { border-color: var(--accent); }
   .result-empty { font-size: 0.65rem; color: var(--muted); text-align: center; padding: 6px 0; }
-
-  /* Hero */
   .result-hero { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 12px; }
   .result-lbl { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
   .result-big { font-family: 'Fraunces', serif; font-size: 2.8rem; font-weight: 700; color: var(--accent); line-height: 1; }
@@ -84,7 +122,6 @@
   .verdict.slack-good  { color: var(--good); }
   .verdict.slack-tight { color: var(--warn); }
   .verdict.slack-miss  { color: var(--danger); }
-
   /* Step chain */
   .steps { border-top: 1px solid var(--border); padding-top: 8px; display: flex; flex-direction: column; }
   .step { display: flex; align-items: baseline; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #1c1c1c; gap: 10px; }
@@ -95,7 +132,6 @@
   .step-val.hi  { color: var(--accent); font-size: 1rem; font-weight: 500; }
   .step-val.dim { color: var(--muted); font-size: 0.72rem; }
   .step-divider { height: 1px; background: var(--border); margin: 3px 0; }
-
   /* Shower suggestion */
   .suggestion { margin-top: 10px; border: 1px solid rgba(240,160,64,0.35); border-radius: 2px; padding: 8px 11px; background: rgba(240,160,64,0.05); display: flex; align-items: flex-start; gap: 8px; }
   .suggestion-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
@@ -105,8 +141,7 @@
   .suggestion-detail strong { color: var(--text); }
   .suggestion.is-ok { border-color: rgba(96,212,160,0.3); background: rgba(96,212,160,0.04); }
   .suggestion.is-ok .suggestion-title { color: var(--good); }
-
-  /* Train live status block */
+  /* Train live status */
   .train-status { margin-top: 8px; border-radius: 2px; padding: 9px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); }
   .train-status.ts-ok      { border-color: rgba(96,212,160,0.35); background: rgba(96,212,160,0.04); }
   .train-status.ts-delay   { border-color: rgba(240,160,64,0.4);  background: rgba(240,160,64,0.05); }
@@ -126,18 +161,6 @@
   .ts-badge.cancelled{ color: var(--danger); background: rgba(240,96,96,0.12); }
   .ts-badge.loading  { color: var(--muted);  background: rgba(255,255,255,0.05); }
   .ts-platform { font-size: 0.58rem; color: var(--muted); margin-top: 3px; }
-
-  /* Tracking status indicator — 3 states */
-  .bus-status { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 4px; font-size: 0.57rem; letter-spacing: 0.07em; text-transform: uppercase; }
-  .bus-status.is-full    { color: var(--good); }
-  .bus-status.is-partial { color: var(--warn); }
-  .bus-status.is-sched   { color: var(--muted); }
-  .bus-item.is-sched-card { opacity: 0.55; }
-  .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-  .is-full    .live-dot { background: var(--good); animation: liveblink 1.4s ease-in-out infinite; }
-  .is-partial .live-dot { background: var(--warn); animation: liveblink 2s ease-in-out infinite; }
-  .is-sched   .live-dot { background: var(--muted); }
-  @keyframes liveblink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.25;transform:scale(0.7)} }
 </style>
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -147,13 +170,17 @@
   <meta name="theme-color" content="#0e0e0e">
 </head>
 <body>
-
   <div class="header">
     <h1>can i <span>sleep more?</span></h1>
     <div class="header-right">
       <div id="clock">--:--:--</div>
       <div class="header-sub">186 · Whitchurch Lane → H&amp;W</div>
     </div>
+  </div>
+
+  <!-- SNOOZE HERO -->
+  <div class="snooze-hero" id="snoozeHero">
+    <div class="snooze-empty">loading buses…</div>
   </div>
 
   <div class="config-row">
@@ -183,9 +210,11 @@
 
   <div class="refresh-row">
     <div class="section-label"><span class="dot"></span>next 186s at stop R</div>
-    <button class="refresh-btn" id="refreshBtn" onclick="loadBuses()">↻ refresh</button>
+    <div class="refresh-right">
+      <button class="sched-toggle" id="schedToggle" onclick="toggleScheduled()">+ sched</button>
+      <button class="refresh-btn" id="refreshBtn" onclick="loadBuses()">↻ refresh</button>
+    </div>
   </div>
-
   <div class="bus-grid" id="busList">
     <div class="loading-msg" style="grid-column:1/-1"><span class="spinner"></span>fetching...</div>
   </div>
@@ -200,14 +229,18 @@ const STOP_R   = '490006427R';
 const STOP_HW  = '490015249M';
 const DARWIN_TOKEN = '61dc1202-c81c-4766-92a9-ff422409042f';
 const DARWIN_URL   = `https://huxley2.azurewebsites.net/departures/hrw/to/mkc/10?accessToken=${DARWIN_TOKEN}`;
-const BUFFER   = 3;
-const POST_SHW = 3, PACK = 3;
+
+const BUFFER       = 3;
+const SHOWER_MINS  = 15;
+const TRIM_MINS    = 5;
+const POST_SHW     = 3;
+const PACK         = 3;
 const FALLBACK_JOURNEY = 18;
 
-// Live Darwin train departures HRW → MKC
-let darwinTrains = [];  // raw trainServices array from Huxley2
+let darwinTrains  = [];
+let darwinLoaded  = false;
+let showScheduled = false;
 
-// Full timetable from TFL API — weekday (non-schooldays), Saturday, Sunday
 const TT = {
   weekday: [
     [5,26],[5,46],[6,7],[6,30],[6,45],[7,4],[7,16],[7,28],[7,40],[7,52],
@@ -249,28 +282,17 @@ function getTodayTimetable() {
   if (d === 6) return TT.saturday;
   return TT.weekday;
 }
-
 function pad(n) { return String(n).padStart(2,'0'); }
 function fmt(t) {
-  // Convert minutes-since-midnight to 12hr lowercase: "7:21am", "12:05pm"
   let h = Math.floor(t / 60) % 24;
   const m = Math.floor(t % 60);
   const ampm = h < 12 ? 'am' : 'pm';
   h = h % 12 || 12;
   return `${h}:${pad(m)}${ampm}`;
 }
-function fmt12str(hhmm) {
-  // Convert "HH:MM" string (from Darwin API) to 12hr: "7:21am"
-  const [h24, m] = hhmm.split(':').map(Number);
-  const ampm = h24 < 12 ? 'am' : 'pm';
-  const h = h24 % 12 || 12;
-  return `${h}:${pad(m)}${ampm}`;
-}
 function nowMins() { const n=new Date(); return n.getHours()*60+n.getMinutes()+n.getSeconds()/60; }
 function tfl(p) { return `https://api.tfl.gov.uk${p}${p.includes('?')?'&':'?'}app_key=${API_KEY}`; }
 
-// Find next train departing after `afterMins` using live Darwin data.
-// Falls back to null if Darwin hasn't loaded yet.
 function nextTrain(afterMins) {
   if (darwinTrains.length) {
     for (const t of darwinTrains) {
@@ -279,95 +301,209 @@ function nextTrain(afterMins) {
       const depMins = h * 60 + m;
       if (depMins >= afterMins) return depMins;
     }
-    return null; // no more trains today in Darwin window
+    return null;
   }
+  // Fallback to timetable if Darwin didn't load
+  if (darwinLoaded) return nextTrainFromTimetable(afterMins);
   return null;
 }
 
-// Merge live buses with timetable, return unified bus list with tracking state
-// tracking: 'full' | 'partial' | 'scheduled'
-function mergeBuses(liveR, hwVehicles, nm) {
-  const MATCH_WINDOW = 3; // mins — live bus matches a timetable slot if within this
-  const LOOKAHEAD    = 90; // mins ahead to show timetable slots
+// Train timetable fallback (approximate HRW departures to MKC — every ~20 min peak, ~30 off-peak)
+function nextTrainFromTimetable(afterMins) {
+  // Simple approximation: trains depart roughly every 20 min from ~5:30 to ~23:50
+  const start = 5 * 60 + 30;
+  const end   = 23 * 60 + 50;
+  if (afterMins > end) return null;
+  const from = Math.max(afterMins, start);
+  // Round up to next :00, :20, :40 (rough 20-min headway)
+  const slot = Math.ceil(from / 20) * 20;
+  return slot <= end ? slot : null;
+}
 
-  // Build live entries
-  const liveEntries = liveR.map(bus => {
-    const depMins = nm + bus.timeToStation / 60;
-    const hwTTS   = hwVehicles[bus.vehicleId];
-    let tracking, jMins;
-    if (hwTTS != null) {
-      const diff = (hwTTS - bus.timeToStation) / 60;
-      if (diff > 5 && diff < 60) {
-        tracking = 'full'; jMins = Math.round(diff);
+function mergeBuses(liveR, hwVehicles, nm) {
+  const MATCH_WINDOW = 3;
+  const LOOKAHEAD    = 90;
+  const liveEntries = liveR
+    .filter(bus => nm + bus.timeToStation / 60 >= nm) // filter out already-passed buses
+    .map(bus => {
+      const depMins = nm + bus.timeToStation / 60;
+      const hwTTS   = hwVehicles[bus.vehicleId];
+      let tracking, jMins;
+      if (hwTTS != null) {
+        const diff = (hwTTS - bus.timeToStation) / 60;
+        if (diff > 5 && diff < 60) {
+          tracking = 'full'; jMins = Math.round(diff);
+        } else {
+          tracking = 'partial'; jMins = FALLBACK_JOURNEY;
+        }
       } else {
         tracking = 'partial'; jMins = FALLBACK_JOURNEY;
       }
-    } else {
-      tracking = 'partial'; jMins = FALLBACK_JOURNEY;
-    }
-    return { depMins, jMins, tracking, live: true, bus };
-  });
-
-  // Find timetable slots not covered by a live entry
+      return { depMins, jMins, tracking, live: true, bus };
+    });
   const tt = getTodayTimetable();
   const schedEntries = [];
   for (const [h, m] of tt) {
     const slotMins = h * 60 + m;
-    if (slotMins < nm - 1) continue;           // already passed
-    if (slotMins > nm + LOOKAHEAD) break;       // too far ahead
-    // Check if any live bus is within MATCH_WINDOW of this slot
+    if (slotMins < nm - 1) continue;
+    if (slotMins > nm + LOOKAHEAD) break;
     const matched = liveEntries.some(e => Math.abs(e.depMins - slotMins) <= MATCH_WINDOW);
     if (!matched) {
       schedEntries.push({
-        depMins: slotMins,
-        jMins: FALLBACK_JOURNEY,
-        tracking: 'scheduled',
-        live: false,
-        bus: null
+        depMins: slotMins, jMins: FALLBACK_JOURNEY,
+        tracking: 'scheduled', live: false, bus: null
       });
     }
   }
-
-  // Merge and sort by departure
   return [...liveEntries, ...schedEntries].sort((a, b) => a.depMins - b.depMins);
 }
 
-let liveR      = [];
-let hwVehicles = {};
+let liveR       = [];
+let hwVehicles  = {};
 let mergedBuses = [];
 let selectedIdx = null;
+
+function toggleScheduled() {
+  showScheduled = !showScheduled;
+  const btn = document.getElementById('schedToggle');
+  btn.classList.toggle('active', showScheduled);
+  btn.textContent = showScheduled ? '− sched' : '+ sched';
+  renderBuses();
+}
+
+// Compute prep/wake/slack for a given bus entry
+function calcForEntry(entry) {
+  const nm      = nowMins();
+  const { depMins, jMins, tracking } = entry;
+  const shower  = document.getElementById('shower').checked;
+  const trim    = document.getElementById('trim').checked;
+  const poop    = parseInt(document.getElementById('poopMins').value) || 6;
+  const walk    = parseInt(document.getElementById('walkMins').value) || 4;
+  const arrHW   = depMins + jMins;
+  const train   = nextTrain(arrHW + BUFFER);
+  const showerMins = shower ? SHOWER_MINS : 0;
+  const trimMins   = trim   ? TRIM_MINS   : 0;
+  const prepTotal  = showerMins + trimMins + POST_SHW + poop + PACK;
+  const leaveAt    = depMins - walk;
+  const startPrepBy = leaveAt - prepTotal;
+  const slack      = Math.floor(startPrepBy - nm);
+  return { depMins, jMins, tracking, arrHW, train, showerMins, trimMins, prepTotal, leaveAt, startPrepBy, slack, walk };
+}
+
+// Find the best bus: first catchable tracked bus with a train connection
+function findBestBus() {
+  const nm   = nowMins();
+  const walk = parseInt(document.getElementById('walkMins').value) || 4;
+  for (let i = 0; i < mergedBuses.length; i++) {
+    const entry = mergedBuses[i];
+    if (entry.tracking === 'scheduled') continue; // only tracked buses for snooze
+    const minsAway = Math.round(entry.depMins - nm);
+    if (minsAway < walk) continue; // can't catch
+    const calc = calcForEntry(entry);
+    if (calc.train) return { idx: i, entry, calc };
+  }
+  return null;
+}
+
+function renderSnooze() {
+  const hero = document.getElementById('snoozeHero');
+  const best = findBestBus();
+
+  if (!best) {
+    const msg = mergedBuses.length === 0 ? 'loading buses…'
+      : darwinLoaded && darwinTrains.length === 0 ? 'no trains found — check manually'
+      : 'no catchable tracked buses right now';
+    hero.className = 'snooze-hero';
+    hero.innerHTML = `<div class="snooze-empty">${msg}</div>`;
+    return;
+  }
+
+  const { calc, entry } = best;
+  const nm = nowMins();
+  const snoozeMinutes = Math.max(0, Math.floor(calc.startPrepBy - nm));
+  const isUrgent = calc.slack < 0;
+  const isTight  = calc.slack >= 0 && calc.slack < 5;
+
+  let verdictCls, verdictText;
+  if (isUrgent) {
+    verdictCls = 'sv-miss';
+    verdictText = `${Math.abs(calc.slack)} min late — get up!`;
+  } else if (isTight) {
+    verdictCls = 'sv-tight';
+    verdictText = 'get moving';
+  } else {
+    verdictCls = 'sv-good';
+    verdictText = `${calc.slack} min to spare`;
+  }
+
+  const heroClass = isUrgent ? 'snooze-hero urgent' : snoozeMinutes > 0 ? 'snooze-hero has-time' : 'snooze-hero';
+
+  const snoozeDisplay = isUrgent ? 'now' : snoozeMinutes === 0 ? 'now' : `${snoozeMinutes} min`;
+  const alarmTime = fmt(calc.startPrepBy);
+
+  hero.className = heroClass;
+  hero.innerHTML = `
+    <div class="snooze-left">
+      <div class="snooze-label">${isUrgent ? 'you\'re late by' : snoozeMinutes === 0 ? 'wake up' : 'you can snooze'}</div>
+      <div class="snooze-time">${snoozeDisplay}</div>
+      <div class="snooze-sub">for the <strong>${fmt(entry.depMins)}</strong> bus → <strong>${fmt(calc.train)}</strong> train</div>
+    </div>
+    <div class="snooze-right">
+      <div class="snooze-alarm">alarm at <strong>${alarmTime}</strong></div>
+      <div class="snooze-verdict ${verdictCls}">${verdictText}</div>
+    </div>`;
+}
 
 async function loadBuses() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('loading');
   document.getElementById('busList').innerHTML =
     '<div class="loading-msg" style="grid-column:1/-1"><span class="spinner"></span>fetching live data...</div>';
-  selectedIdx = null; renderResult();
+
+  // Preserve selection by departure time
+  const prevDepMins = selectedIdx !== null && mergedBuses[selectedIdx] ? mergedBuses[selectedIdx].depMins : null;
+  selectedIdx = null;
 
   try {
     const [resR, resHW, resDarwin] = await Promise.all([
       fetch(tfl(`/StopPoint/${STOP_R}/Arrivals`)),
       fetch(tfl(`/StopPoint/${STOP_HW}/Arrivals`)),
-      fetch(DARWIN_URL)
+      fetch(DARWIN_URL).catch(() => null)
     ]);
     if (!resR.ok) throw new Error(`Stop R: HTTP ${resR.status}`);
     if (!resHW.ok) throw new Error(`H&W: HTTP ${resHW.status}`);
     const [dataR, dataHW] = await Promise.all([resR.json(), resHW.json()]);
-    const darwinData = resDarwin.ok ? await resDarwin.json() : {};
+
+    darwinLoaded = true;
+    if (resDarwin && resDarwin.ok) {
+      const darwinData = await resDarwin.json();
+      darwinTrains = darwinData.trainServices || [];
+    } else {
+      darwinTrains = []; // Darwin failed — fallback will kick in via nextTrainFromTimetable
+    }
 
     liveR = dataR
       .filter(a => String(a.lineId)==='186' || String(a.lineName)==='186')
       .sort((a,b) => a.timeToStation - b.timeToStation);
-
     hwVehicles = {};
     dataHW
       .filter(a => String(a.lineId)==='186' || String(a.lineName)==='186')
       .forEach(a => { hwVehicles[a.vehicleId] = a.timeToStation; });
 
-    darwinTrains = darwinData.trainServices || [];
-
     mergedBuses = mergeBuses(liveR, hwVehicles, nowMins());
+
+    // Restore selection
+    if (prevDepMins !== null) {
+      let bestMatch = -1, bestDiff = Infinity;
+      mergedBuses.forEach((e, i) => {
+        const diff = Math.abs(e.depMins - prevDepMins);
+        if (diff < bestDiff && diff < 3) { bestDiff = diff; bestMatch = i; }
+      });
+      if (bestMatch >= 0) selectedIdx = bestMatch;
+    }
+
     renderBuses();
+    renderSnooze();
     renderResult();
   } catch(e) {
     document.getElementById('busList').innerHTML =
@@ -378,84 +514,97 @@ async function loadBuses() {
 }
 
 function renderBuses() {
-  const nm   = nowMins();
-  // Re-merge on each render so times stay fresh
+  const nm = nowMins();
   mergedBuses = mergeBuses(liveR, hwVehicles, nm);
-
   const list = document.getElementById('busList');
+
   if (!mergedBuses.length) {
     list.innerHTML = '<div class="loading-msg" style="grid-column:1/-1">no 186 buses right now</div>';
     return;
   }
-  const walk = parseInt(document.getElementById('walkMins').value)||4;
 
+  const walk = parseInt(document.getElementById('walkMins').value) || 4;
   const statusMeta = {
     full:      { cls: 'is-full',    label: 'full track' },
     partial:   { cls: 'is-partial', label: 'partial' },
     scheduled: { cls: 'is-sched',   label: 'scheduled' }
   };
 
-  list.innerHTML = mergedBuses.map((entry, i) => {
-    const { depMins, jMins, tracking } = entry;
-    const minsAway = Math.round(depMins - nm);
-    const canCatch = minsAway >= walk;
-    const tight    = canCatch && (minsAway - walk) < 3;
-    const badgeCls = !canCatch ? 'badge-miss' : tight ? 'badge-tight' : 'badge-good';
-    const badgeLbl = !canCatch ? 'too soon'   : tight ? 'tight'       : 'ok';
-    const arrHW    = depMins + jMins;
-    const train    = nextTrain(arrHW + BUFFER);
-    const trainLabel = train ? `🚆 ${fmt(train)}` : '🚆 —';
-    const rideLabel  = tracking === 'full' ? `${jMins} min ride` : `~${jMins} min ride`;
-    const { cls: stCls, label: stLbl } = statusMeta[tracking];
-    const cardDim  = tracking === 'scheduled' ? 'is-sched-card' : '';
-    const sel      = selectedIdx === i ? 'selected' : '';
+  // Split tracked vs scheduled
+  const tracked   = [];
+  const scheduled = [];
+  mergedBuses.forEach((entry, i) => {
+    if (entry.tracking === 'scheduled') scheduled.push({ entry, origIdx: i });
+    else tracked.push({ entry, origIdx: i });
+  });
 
-    return `<div class="bus-item ${sel} ${cardDim}" onclick="selectBus(${i})">
-      <div class="bus-status ${stCls}"><span class="live-dot"></span>${stLbl}</div>
-      <div class="bus-time">${fmt(depMins)}</div>
-      <div class="bus-sub">in ${minsAway} min</div>
-      <div class="bus-sub">${rideLabel}</div>
-      <div class="bus-train">${trainLabel}</div>
-      <div class="badge ${badgeCls}">${badgeLbl}</div>
-    </div>`;
-  }).join('');
+  let html = '';
+
+  // Tracked buses (always shown)
+  if (!tracked.length) {
+    html += '<div class="loading-msg" style="grid-column:1/-1">no tracked buses — toggle scheduled ↗</div>';
+  } else {
+    tracked.forEach(({ entry, origIdx }) => {
+      html += renderBusCard(entry, origIdx, nm, walk, statusMeta);
+    });
+  }
+
+  // Scheduled buses (toggled)
+  if (showScheduled && scheduled.length) {
+    html += `<div class="sched-divider"><div class="sched-divider-line"></div><div class="sched-divider-label">scheduled (timetable only)</div><div class="sched-divider-line"></div></div>`;
+    scheduled.forEach(({ entry, origIdx }) => {
+      html += renderBusCard(entry, origIdx, nm, walk, statusMeta);
+    });
+  }
+
+  list.innerHTML = html;
 }
 
-function selectBus(i) { selectedIdx=i; renderBuses(); renderResult(); }
+function renderBusCard(entry, idx, nm, walk, statusMeta) {
+  const { depMins, jMins, tracking } = entry;
+  const minsAway = Math.round(depMins - nm);
+  const canCatch = minsAway >= walk;
+  const tight    = canCatch && (minsAway - walk) < 3;
+  const badgeCls = !canCatch ? 'badge-miss' : tight ? 'badge-tight' : 'badge-good';
+  const badgeLbl = !canCatch ? 'too soon'   : tight ? 'tight'       : 'ok';
+  const arrHW    = depMins + jMins;
+  const train    = nextTrain(arrHW + BUFFER);
+  const trainLabel = train ? `🚆 ${fmt(train)}` : '🚆 —';
+  const rideLabel  = tracking === 'full' ? `${jMins} min ride` : `~${jMins} min ride`;
+  const { cls: stCls, label: stLbl } = statusMeta[tracking];
+  const cardDim  = tracking === 'scheduled' ? 'is-sched-card' : '';
+  const sel      = selectedIdx === idx ? 'selected' : '';
 
-// Find live Darwin status for a specific scheduled train (trainMins = mins since midnight)
-// Darwin std field is "HH:MM" 24hr string. etd is "On time", "HH:MM", "Cancelled", or "Delayed"
+  return `<div class="bus-item ${sel} ${cardDim}" onclick="selectBus(${idx})">
+    <div class="bus-status ${stCls}"><span class="live-dot"></span>${stLbl}</div>
+    <div class="bus-time">${fmt(depMins)}</div>
+    <div class="bus-sub">in ${minsAway} min</div>
+    <div class="bus-sub">${rideLabel}</div>
+    <div class="bus-train">${trainLabel}</div>
+    <div class="badge ${badgeCls}">${badgeLbl}</div>
+  </div>`;
+}
+
+function selectBus(i) { selectedIdx = i; renderBuses(); renderResult(); }
+
 function getTrainStatus(trainMins) {
-  if (!darwinTrains.length) return null; // still loading or failed
-
+  if (!darwinTrains.length) return null;
   for (const t of darwinTrains) {
     if (!t.std) continue;
     const [h, m] = t.std.split(':').map(Number);
     const schedMins = h * 60 + m;
-    if (Math.abs(schedMins - trainMins) > 2) continue; // not this train
-
+    if (Math.abs(schedMins - trainMins) > 2) continue;
     const etd = (t.etd || '').trim();
     const cancelled = t.isCancelled || etd.toLowerCase() === 'cancelled';
-
-    let delayMins = 0;
-    let expMins = schedMins;
+    let delayMins = 0, expMins = schedMins;
     if (!cancelled && etd !== 'On time' && etd !== 'Delayed' && /^\d{2}:\d{2}$/.test(etd)) {
       const [eh, em] = etd.split(':').map(Number);
       expMins = eh * 60 + em;
       delayMins = expMins - schedMins;
     }
-
-    return {
-      found: true,
-      schedMins,
-      expMins,
-      delayMins,
-      cancelled,
-      onTime: !cancelled && etd === 'On time',
-      platform: t.platform || null
-    };
+    return { found: true, schedMins, expMins, delayMins, cancelled, onTime: !cancelled && etd === 'On time', platform: t.platform || null };
   }
-  return { found: false }; // train not yet in Darwin's window (~2hr ahead)
+  return { found: false };
 }
 
 function renderResult() {
@@ -465,37 +614,21 @@ function renderResult() {
     panel.innerHTML = '<div class="result-empty">tap a bus to see if you can sleep in</div>';
     return;
   }
-
-  const nm    = nowMins();
   const entry = mergedBuses[selectedIdx];
-  if (!entry) { selectedIdx=null; renderResult(); return; }
+  if (!entry) { selectedIdx = null; renderResult(); return; }
 
-  const { depMins, jMins, tracking } = entry;
-  const shower = document.getElementById('shower').checked;
-  const trim   = document.getElementById('trim').checked;
-  const poop   = parseInt(document.getElementById('poopMins').value)||6;
-  const walk   = parseInt(document.getElementById('walkMins').value)||4;
-
-  const busDepMins = depMins - nm;
-  const arrHW      = depMins + jMins;
-  const train      = nextTrain(arrHW + BUFFER);
+  const calc = calcForEntry(entry);
+  const nm   = nowMins();
+  const { depMins, jMins, tracking, arrHW, train, showerMins, trimMins, prepTotal, leaveAt, startPrepBy, slack, walk } = calc;
 
   if (!train) {
     panel.className = 'result-panel';
-    const msg = darwinTrains.length === 0
-      ? 'loading train times…'
-      : 'no more trains today';
+    const msg = !darwinLoaded ? 'loading train times…' : 'no more trains today';
     panel.innerHTML = `<div class="result-empty" style="color:var(--muted)">${msg}</div>`;
     return;
   }
 
-  const showerMins = shower ? 15 : 0;
-  const trimMins   = trim   ?  5 : 0;
-  const prepTotal  = showerMins + trimMins + POST_SHW + poop + PACK;
-  const leaveAt    = depMins - walk;
-  const startPrepBy = leaveAt - prepTotal;
-  const slack      = Math.floor(startPrepBy - nm);
-
+  const busDepMins = depMins - nm;
   const slackCls = slack < 0 ? 'slack-miss' : slack < 5 ? 'slack-tight' : 'slack-good';
   const slackLbl = slack < 0
     ? `${Math.abs(slack)} min late — get up now!`
@@ -504,116 +637,80 @@ function renderResult() {
   const prepLines = [];
   if (showerMins) prepLines.push(`shower +${showerMins}`);
   if (trimMins)   prepLines.push(`trim +${trimMins}`);
-  prepLines.push(`dressed +${POST_SHW}`, `poop +${poop}`, `pack +${PACK}`);
+  prepLines.push(`dressed +${POST_SHW}`, `poop +${parseInt(document.getElementById('poopMins').value)||6}`, `pack +${PACK}`);
 
   const rideColors = { full: 'var(--good)', partial: 'var(--warn)', scheduled: 'var(--muted)' };
   const rideLabels = { full: 'live', partial: 'partial', scheduled: 'sched' };
   const rideNote = `${tracking === 'full' ? jMins : '~'+jMins} min <span style="color:${rideColors[tracking]};font-size:0.65rem">${rideLabels[tracking]}</span>`;
 
-  // --- Shower suggestion logic ---
+  // Shower suggestion
   let suggestionHtml = '';
-  if (document.getElementById('shower').checked) {
-    // Try progressively shorter showers: 10, 5, skip entirely
+  if (document.getElementById('shower').checked && slack < 8) {
     const suggestions = [
       { label: '10 min quicker shower', saving: 10 },
       { label: '5 min quicker shower',  saving: 5  },
-      { label: 'skipping shower',       saving: 15 }
+      { label: 'skipping shower',       saving: SHOWER_MINS }
     ];
-    // Only show suggestion if currently tight or late (slack < 8)
-    if (slack < 8) {
-      let found = null;
-      for (const s of suggestions) {
-        if (s.saving > showerMins) continue; // can't save more than shower duration
-        const newSlack = slack + s.saving;
-        if (newSlack >= 0 && !found) {
-          found = { ...s, newSlack };
-        }
-      }
-      if (found) {
-        const isOk = found.newSlack >= 5;
-        const cls  = isOk ? 'is-ok' : '';
-        const newWakeUp = fmt(startPrepBy + found.saving); // wake up later by saving mins
-        suggestionHtml = `<div class="suggestion ${cls}">
-          <div class="suggestion-icon">🚿</div>
-          <div class="suggestion-body">
-            <div class="suggestion-title">${found.newSlack >= 0 ? 'Try ' + found.label : ''} ${found.newSlack < 0 ? 'Still tight even skipping shower' : ''}</div>
-            <div class="suggestion-detail">
-              ${found.newSlack >= 0
-                ? `<strong>${found.label}</strong> → wake up at <strong>${newWakeUp}</strong> instead, giving you <strong>${found.newSlack} min</strong> to spare`
-                : `Even skipping the shower you'd be <strong>${Math.abs(found.newSlack)} min short</strong> — aim for the next bus`
-              }
-            </div>
+    let found = null;
+    for (const s of suggestions) {
+      if (s.saving > showerMins) continue;
+      const newSlack = slack + s.saving;
+      if (newSlack >= 0 && !found) found = { ...s, newSlack };
+    }
+    if (found) {
+      const isOk = found.newSlack >= 5;
+      const newWakeUp = fmt(startPrepBy + found.saving);
+      suggestionHtml = `<div class="suggestion ${isOk ? 'is-ok' : ''}">
+        <div class="suggestion-icon">🚿</div>
+        <div class="suggestion-body">
+          <div class="suggestion-title">${found.newSlack >= 0 ? 'Try ' + found.label : 'Still tight even skipping shower'}</div>
+          <div class="suggestion-detail">
+            ${found.newSlack >= 0
+              ? `<strong>${found.label}</strong> → wake up at <strong>${newWakeUp}</strong> instead, giving you <strong>${found.newSlack} min</strong> to spare`
+              : `Even skipping the shower you'd be <strong>${Math.abs(found.newSlack)} min short</strong> — aim for the next bus`
+            }
           </div>
-        </div>`;
-      } else if (slack < 0) {
-        // No shower trick can save this — suggest next bus
-        suggestionHtml = `<div class="suggestion">
-          <div class="suggestion-icon">⏭️</div>
-          <div class="suggestion-body">
-            <div class="suggestion-title">Too late for this bus</div>
-            <div class="suggestion-detail">Even skipping the shower won't be enough — tap the next bus to see your options</div>
-          </div>
-        </div>`;
-      }
+        </div>
+      </div>`;
+    } else if (slack < 0) {
+      suggestionHtml = `<div class="suggestion">
+        <div class="suggestion-icon">⏭️</div>
+        <div class="suggestion-body">
+          <div class="suggestion-title">Too late for this bus</div>
+          <div class="suggestion-detail">Even skipping the shower won't be enough — tap the next bus to see your options</div>
+        </div>
+      </div>`;
     }
   }
 
-  // --- Train live status (Darwin) ---
+  // Train status
   const ts = getTrainStatus(train);
   let trainStatusHtml = '';
   if (ts === null) {
     trainStatusHtml = `<div class="train-status ts-loading">
-      <div class="ts-left">
-        <div class="ts-dest">Euston → Milton Keynes Central</div>
-        <div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div>
-      </div>
+      <div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div></div>
       <div class="ts-right"><div class="ts-badge loading"><span class="spinner"></span> checking</div></div>
     </div>`;
   } else if (!ts.found) {
     trainStatusHtml = `<div class="train-status">
-      <div class="ts-left">
-        <div class="ts-dest">Euston → Milton Keynes Central</div>
-        <div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div>
-      </div>
-      <div class="ts-right">
-        <div class="ts-badge loading">no live data yet</div>
-        <div class="ts-platform">check closer to departure</div>
-      </div>
+      <div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div></div>
+      <div class="ts-right"><div class="ts-badge loading">no live data yet</div><div class="ts-platform">check closer to departure</div></div>
     </div>`;
   } else if (ts.cancelled) {
     trainStatusHtml = `<div class="train-status ts-cancel">
-      <div class="ts-left">
-        <div class="ts-dest">Euston → Milton Keynes Central</div>
-        <div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div>
-      </div>
-      <div class="ts-right">
-        <div class="ts-badge cancelled">cancelled</div>
-        <div class="ts-platform" style="color:var(--danger)">catch the next one</div>
-      </div>
+      <div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div></div>
+      <div class="ts-right"><div class="ts-badge cancelled">cancelled</div><div class="ts-platform" style="color:var(--danger)">catch the next one</div></div>
     </div>`;
   } else {
     const delay = ts.delayMins;
     const tsCls    = delay <= 0 ? 'ts-ok' : 'ts-delay';
-    const badgeCls = delay <= 0 ? 'on-time' : 'delayed';
-    const badgeLbl = ts.onTime ? 'on time'
-                   : delay < -1 ? `${Math.abs(delay)} min early`
-                   : delay > 0  ? `+${delay} min`
-                   : 'on time';
-    const expHtml  = delay > 1
-      ? `<span class="ts-exp late"> exp ${fmt(ts.expMins)}</span>`
-      : delay < -1
-        ? `<span class="ts-exp early"> exp ${fmt(ts.expMins)}</span>`
-        : '';
+    const badgeCls2 = delay <= 0 ? 'on-time' : 'delayed';
+    const badgeLbl2 = ts.onTime ? 'on time' : delay < -1 ? `${Math.abs(delay)} min early` : delay > 0 ? `+${delay} min` : 'on time';
+    const expHtml  = delay > 1 ? `<span class="ts-exp late"> exp ${fmt(ts.expMins)}</span>` : delay < -1 ? `<span class="ts-exp early"> exp ${fmt(ts.expMins)}</span>` : '';
     const platformHtml = ts.platform ? `<div class="ts-platform">platform ${ts.platform}</div>` : '';
     trainStatusHtml = `<div class="train-status ${tsCls}">
-      <div class="ts-left">
-        <div class="ts-dest">Euston → Milton Keynes Central</div>
-        <div class="ts-time"><span class="ts-sched">${fmt(train)}</span>${expHtml}</div>
-      </div>
-      <div class="ts-right">
-        <div class="ts-badge ${badgeCls}">${badgeLbl}</div>
-        ${platformHtml}
-      </div>
+      <div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span>${expHtml}</div></div>
+      <div class="ts-right"><div class="ts-badge ${badgeCls2}">${badgeLbl2}</div>${platformHtml}</div>
     </div>`;
   }
 
@@ -654,25 +751,25 @@ function renderResult() {
 }
 
 document.querySelectorAll('input').forEach(el => {
-  el.addEventListener('change', () => { renderBuses(); renderResult(); });
-  el.addEventListener('input',  () => renderResult());
+  el.addEventListener('change', () => { renderBuses(); renderSnooze(); renderResult(); });
+  el.addEventListener('input',  () => { renderSnooze(); renderResult(); });
 });
 
 loadBuses();
 setInterval(loadBuses, 60000);
+// Update snooze countdown every 15s between refreshes
+setInterval(() => { renderSnooze(); }, 15000);
 
 function updateClock() {
   const n = new Date();
   let h = n.getHours(), m = n.getMinutes(), s = n.getSeconds();
   const ampm = h < 12 ? 'am' : 'pm';
   h = h % 12 || 12;
-  document.getElementById('clock').textContent =
-    h + ':' + pad(m) + ':' + pad(s) + ampm;
+  document.getElementById('clock').textContent = h + ':' + pad(m) + ':' + pad(s) + ampm;
 }
 updateClock();
 setInterval(updateClock, 1000);
 </script>
-
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
