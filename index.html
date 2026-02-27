@@ -19,7 +19,6 @@
     padding: 14px 14px 12px;
     display: flex; flex-direction: column; gap: 8px;
   }
-  /* Header */
   .header { display: flex; align-items: flex-start; justify-content: space-between; }
   .header h1 { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 300; line-height: 1.3; }
   .header h1 span { color: var(--accent); font-style: italic; }
@@ -43,16 +42,21 @@
 .weather-loading { font-size: 0.58rem; color: var(–muted); }
 
 /* Line status banner */
-.line-banner { display: flex; align-items: center; gap: 8px; border-radius: 2px; padding: 7px 10px; font-size: 0.62rem; line-height: 1.4; }
+.line-banner { border-radius: 2px; padding: 7px 10px; font-size: 0.62rem; line-height: 1.4; cursor: pointer; user-select: none; }
 .line-banner.lb-good { border: 1px solid rgba(96,212,160,0.2); background: rgba(96,212,160,0.03); color: var(–good); }
 .line-banner.lb-warn { border: 1px solid rgba(240,160,64,0.35); background: rgba(240,160,64,0.05); color: var(–warn); }
 .line-banner.lb-bad  { border: 1px solid rgba(240,96,96,0.35); background: rgba(240,96,96,0.05); color: var(–danger); }
 .line-banner.lb-info { border: 1px solid var(–border); background: var(–surface); color: var(–muted); }
+.lb-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.lb-header-left { display: flex; align-items: center; gap: 8px; }
 .lb-icon { font-size: 0.9rem; flex-shrink: 0; }
-.lb-body { flex: 1; }
 .lb-title { font-weight: 500; font-size: 0.62rem; }
-.lb-detail { font-size: 0.56rem; color: var(–muted); margin-top: 2px; }
+.lb-chevron { font-size: 0.7rem; transition: transform 0.2s; color: inherit; opacity: 0.6; }
+.lb-chevron.open { transform: rotate(180deg); }
+.lb-detail { font-size: 0.56rem; color: var(–muted); margin-top: 6px; line-height: 1.5; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; max-height: 0; opacity: 0; }
+.lb-detail.expanded { max-height: 300px; opacity: 1; }
 .line-banner.lb-warn .lb-detail, .line-banner.lb-bad .lb-detail { color: inherit; opacity: 0.75; }
+.line-banner.lb-warn .lb-detail.expanded, .line-banner.lb-bad .lb-detail.expanded { opacity: 0.75; }
 
 /* Config */
 .config-row { display: flex; gap: 6px; }
@@ -74,7 +78,6 @@ input:checked + .slider:before { transform: translateX(15px); background: var(�
 .num-input:focus { border-color: var(–accent); }
 .num-unit { font-size: 0.58rem; color: var(–muted); }
 
-/* Refresh row */
 .refresh-row { display: flex; justify-content: space-between; align-items: center; }
 .section-label { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(–muted); }
 .refresh-right { display: flex; align-items: center; gap: 6px; }
@@ -86,7 +89,6 @@ input:checked + .slider:before { transform: translateX(15px); background: var(�
 .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(–accent); margin-right: 5px; animation: pulse 2s ease-in-out infinite; vertical-align: middle; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-/* Bus grid */
 .bus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
 .bus-item { background: var(–surface); border: 1px solid var(–border); border-radius: 2px; padding: 10px 6px 9px; cursor: pointer; transition: border-color 0.15s, opacity 0.2s; text-align: center; }
 .bus-item:hover { border-color: #444; }
@@ -109,7 +111,6 @@ input:checked + .slider:before { transform: translateX(15px); background: var(�
 .sched-divider-line { flex: 1; height: 1px; background: var(–border); }
 .sched-divider-label { font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(–muted); white-space: nowrap; }
 
-/* Bus tracking status */
 .bus-status { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 4px; font-size: 0.57rem; letter-spacing: 0.07em; text-transform: uppercase; }
 .bus-status.is-full    { color: var(–good); }
 .bus-status.is-partial { color: var(–warn); }
@@ -120,16 +121,12 @@ input:checked + .slider:before { transform: translateX(15px); background: var(�
 .is-sched   .live-dot { background: var(–muted); }
 @keyframes liveblink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.25;transform:scale(0.7)} }
 
-/* Bus delay indicator */
 .bus-delay { font-size: 0.55rem; margin-top: 2px; line-height: 1.3; }
 .bus-delay .sched-time { color: var(–muted); text-decoration: line-through; }
 .bus-delay .delay-amount { color: var(–warn); font-weight: 500; }
 .bus-delay .early-amount { color: var(–good); font-weight: 500; }
-
-/* Bus history tag */
 .bus-history { font-size: 0.5rem; color: var(–muted); margin-top: 3px; font-style: italic; }
 
-/* Result panel */
 .result-panel { background: var(–surface); border: 1px solid var(–border); border-radius: 2px; padding: 12px 14px; }
 .result-panel.active { border-color: var(–accent); }
 .result-empty { font-size: 0.65rem; color: var(–muted); text-align: center; padding: 6px 0; }
@@ -140,7 +137,6 @@ input:checked + .slider:before { transform: translateX(15px); background: var(�
 .verdict.slack-good  { color: var(–good); }
 .verdict.slack-tight { color: var(–warn); }
 .verdict.slack-miss  { color: var(–danger); }
-/* Step chain */
 .steps { border-top: 1px solid var(–border); padding-top: 8px; display: flex; flex-direction: column; }
 .step { display: flex; align-items: baseline; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #1c1c1c; gap: 10px; }
 .step:last-child { border-bottom: none; }
@@ -150,7 +146,6 @@ input:checked + .slider:before { transform: translateX(15px); background: var(�
 .step-val.hi  { color: var(–accent); font-size: 1rem; font-weight: 500; }
 .step-val.dim { color: var(–muted); font-size: 0.72rem; }
 .step-divider { height: 1px; background: var(–border); margin: 3px 0; }
-/* Shower suggestion */
 .suggestion { margin-top: 10px; border: 1px solid rgba(240,160,64,0.35); border-radius: 2px; padding: 8px 11px; background: rgba(240,160,64,0.05); display: flex; align-items: flex-start; gap: 8px; }
 .suggestion-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
 .suggestion-body { flex: 1; }
@@ -159,7 +154,6 @@ input:checked + .slider:before { transform: translateX(15px); background: var(�
 .suggestion-detail strong { color: var(–text); }
 .suggestion.is-ok { border-color: rgba(96,212,160,0.3); background: rgba(96,212,160,0.04); }
 .suggestion.is-ok .suggestion-title { color: var(–good); }
-/* Train live status */
 .train-status { margin-top: 8px; border-radius: 2px; padding: 9px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(–border); background: rgba(255,255,255,0.02); }
 .train-status.ts-ok      { border-color: rgba(96,212,160,0.35); background: rgba(96,212,160,0.04); }
 .train-status.ts-delay   { border-color: rgba(240,160,64,0.4);  background: rgba(240,160,64,0.05); }
@@ -196,42 +190,20 @@ input:checked + .slider:before { transform: translateX(15px); background: var(�
       <div class="header-sub">186 · Whitchurch Lane → H&amp;W</div>
     </div>
   </div>
-
-  <!-- WEATHER STRIP -->
-
-  <div class="weather-strip" id="weatherStrip">
-    <div class="weather-loading"><span class="spinner"></span>weather...</div>
-  </div>
-
-  <!-- LINE STATUS BANNER (hidden if good service) -->
-
+  <div class="weather-strip" id="weatherStrip"><div class="weather-loading"><span class="spinner"></span>weather...</div></div>
   <div id="lineBanner"></div>
-
   <div class="config-row">
     <div class="config-block">
       <div class="cfg-label">still need to</div>
-      <div class="toggle-row">
-        <div><div class="toggle-name">Shower</div><div class="toggle-mins">+15 min</div></div>
-        <label class="switch"><input type="checkbox" id="shower" checked><span class="slider"></span></label>
-      </div>
-      <div class="toggle-row">
-        <div><div class="toggle-name">Trim</div><div class="toggle-mins">+5 min</div></div>
-        <label class="switch"><input type="checkbox" id="trim"><span class="slider"></span></label>
-      </div>
+      <div class="toggle-row"><div><div class="toggle-name">Shower</div><div class="toggle-mins">+15 min</div></div><label class="switch"><input type="checkbox" id="shower" checked><span class="slider"></span></label></div>
+      <div class="toggle-row"><div><div class="toggle-name">Trim</div><div class="toggle-mins">+5 min</div></div><label class="switch"><input type="checkbox" id="trim"><span class="slider"></span></label></div>
     </div>
     <div class="config-block">
       <div class="cfg-label">adjust</div>
-      <div class="num-row">
-        <div class="num-name">💩 Poop</div>
-        <div class="num-ctrl"><input type="number" class="num-input" id="poopMins" value="6" min="1" max="30"><span class="num-unit">min</span></div>
-      </div>
-      <div class="num-row">
-        <div class="num-name">🚶 Walk</div>
-        <div class="num-ctrl"><input type="number" class="num-input" id="walkMins" value="4" min="1" max="20"><span class="num-unit">min</span></div>
-      </div>
+      <div class="num-row"><div class="num-name">💩 Poop</div><div class="num-ctrl"><input type="number" class="num-input" id="poopMins" value="6" min="1" max="30"><span class="num-unit">min</span></div></div>
+      <div class="num-row"><div class="num-name">🚶 Walk</div><div class="num-ctrl"><input type="number" class="num-input" id="walkMins" value="4" min="1" max="20"><span class="num-unit">min</span></div></div>
     </div>
   </div>
-
   <div class="refresh-row">
     <div class="section-label"><span class="dot"></span>next 186s at stop R</div>
     <div class="refresh-right">
@@ -239,13 +211,8 @@ input:checked + .slider:before { transform: translateX(15px); background: var(�
       <button class="refresh-btn" id="refreshBtn" onclick="loadBuses()">↻ refresh</button>
     </div>
   </div>
-  <div class="bus-grid" id="busList">
-    <div class="loading-msg" style="grid-column:1/-1"><span class="spinner"></span>fetching...</div>
-  </div>
-
-  <div class="result-panel" id="resultPanel">
-    <div class="result-empty">tap a bus to see if you can sleep in</div>
-  </div>
+  <div class="bus-grid" id="busList"><div class="loading-msg" style="grid-column:1/-1"><span class="spinner"></span>fetching...</div></div>
+  <div class="result-panel" id="resultPanel"><div class="result-empty">tap a bus to see if you can sleep in</div></div>
 
 <script>
 const API_KEY  = '965df0fd29114427b78c98d0fb844f84';
@@ -253,759 +220,309 @@ const STOP_R   = '490006427R';
 const STOP_HW  = '490015249M';
 const DARWIN_TOKEN = '61dc1202-c81c-4766-92a9-ff422409042f';
 const DARWIN_URL   = `https://huxley2.azurewebsites.net/departures/hrw/to/mkc/10?accessToken=${DARWIN_TOKEN}`;
+const WX_LAT = 51.6085, WX_LON = -0.3245;
+const BUFFER=3, SHOWER_MINS=15, TRIM_MINS=5, POST_SHW=3, PACK=3, FALLBACK_JOURNEY=18;
 
-// OpenWeatherMap — free tier
-const OWM_KEY  = '284b04e34e45ccb5e521114eb12a9ba5'; // free key
-const OWM_LAT  = 51.6085;  // Whitchurch Lane area
-const OWM_LON  = -0.3245;
+let darwinTrains=[], darwinLoaded=false, showScheduled=false, weatherPrepExtra=0;
 
-const BUFFER       = 3;
-const SHOWER_MINS  = 15;
-const TRIM_MINS    = 5;
-const POST_SHW     = 3;
-const PACK         = 3;
-const FALLBACK_JOURNEY = 18;
+const TT={weekday:[[5,26],[5,46],[6,7],[6,30],[6,45],[7,4],[7,16],[7,28],[7,40],[7,52],[8,4],[8,16],[8,28],[8,40],[8,52],[9,4],[9,16],[9,28],[9,40],[9,52],[10,4],[10,16],[10,28],[10,40],[10,52],[11,5],[11,17],[11,29],[11,41],[11,54],[12,6],[12,19],[12,31],[12,43],[12,55],[13,7],[13,19],[13,31],[13,44],[13,56],[14,8],[14,21],[14,34],[14,47],[14,59],[15,11],[15,23],[15,35],[15,47],[15,59],[16,11],[16,23],[16,35],[16,48],[17,0],[17,12],[17,25],[17,37],[17,50],[18,3],[18,16],[18,29],[18,42],[18,54],[19,7],[19,18],[19,29],[19,40],[19,51],[20,1],[20,13],[20,24],[20,36],[20,51],[21,5],[21,20],[21,34],[21,49],[22,3],[22,18],[22,31],[22,45],[22,59],[23,12],[23,27],[23,42],[23,56]],saturday:[[5,25],[5,45],[6,5],[6,27],[6,47],[7,7],[7,30],[7,47],[8,2],[8,17],[8,32],[8,43],[8,54],[9,6],[9,18],[9,30],[9,42],[9,54],[10,5],[10,17],[10,28],[10,40],[10,52],[11,3],[11,16],[11,29],[11,41],[11,53],[12,6],[12,18],[12,31],[12,43],[12,55],[13,7],[13,19],[13,31],[13,44],[13,56],[14,8],[14,20],[14,32],[14,44],[14,56],[15,8],[15,20],[15,31],[15,43],[15,55],[16,7],[16,19],[16,31],[16,43],[16,55],[17,7],[17,18],[17,30],[17,42],[17,54],[18,6],[18,18],[18,30],[18,42],[18,54],[19,9],[19,24],[19,39],[19,53],[20,7],[20,21],[20,36],[20,51],[21,6],[21,20],[21,34],[21,49],[22,4],[22,18],[22,31],[22,46],[22,59],[23,13],[23,28],[23,42],[23,57]],sunday:[[5,25],[5,45],[6,5],[6,25],[6,46],[7,6],[7,26],[7,47],[8,8],[8,29],[8,50],[9,12],[9,33],[9,48],[10,3],[10,17],[10,33],[10,48],[11,2],[11,17],[11,32],[11,47],[12,3],[12,18],[12,33],[12,49],[13,4],[13,19],[13,34],[13,49],[14,4],[14,19],[14,34],[14,49],[15,4],[15,19],[15,34],[15,49],[16,3],[16,17],[16,32],[16,47],[17,2],[17,17],[17,32],[17,47],[18,2],[18,16],[18,31],[18,46],[19,1],[19,16],[19,31],[19,46],[20,0],[20,15],[20,30],[20,45],[21,1],[21,17],[21,31],[21,46],[22,0],[22,14],[22,29],[22,43],[22,58],[23,12],[23,27],[23,42],[23,56]]};
 
-let darwinTrains  = [];
-let darwinLoaded  = false;
-let showScheduled = false;
-let weatherData   = null;
-let weatherPrepExtra = 0; // extra minutes for coat/umbrella
+function getTodayTimetable(){const d=new Date().getDay();return d===0?TT.sunday:d===6?TT.saturday:TT.weekday;}
+function pad(n){return String(n).padStart(2,'0');}
+function fmt(t){let h=Math.floor(t/60)%24;const m=Math.floor(t%60),ap=h<12?'am':'pm';h=h%12||12;return`${h}:${pad(m)}${ap}`;}
+function nowMins(){const n=new Date();return n.getHours()*60+n.getMinutes()+n.getSeconds()/60;}
+function tfl(p){return`https://api.tfl.gov.uk${p}${p.includes('?')?'&':'?'}app_key=${API_KEY}`;}
 
-const TT = {
-  weekday: [
-    [5,26],[5,46],[6,7],[6,30],[6,45],[7,4],[7,16],[7,28],[7,40],[7,52],
-    [8,4],[8,16],[8,28],[8,40],[8,52],[9,4],[9,16],[9,28],[9,40],[9,52],
-    [10,4],[10,16],[10,28],[10,40],[10,52],[11,5],[11,17],[11,29],[11,41],[11,54],
-    [12,6],[12,19],[12,31],[12,43],[12,55],[13,7],[13,19],[13,31],[13,44],[13,56],
-    [14,8],[14,21],[14,34],[14,47],[14,59],[15,11],[15,23],[15,35],[15,47],[15,59],
-    [16,11],[16,23],[16,35],[16,48],[17,0],[17,12],[17,25],[17,37],[17,50],
-    [18,3],[18,16],[18,29],[18,42],[18,54],[19,7],[19,18],[19,29],[19,40],[19,51],
-    [20,1],[20,13],[20,24],[20,36],[20,51],[21,5],[21,20],[21,34],[21,49],
-    [22,3],[22,18],[22,31],[22,45],[22,59],[23,12],[23,27],[23,42],[23,56]
-  ],
-  saturday: [
-    [5,25],[5,45],[6,5],[6,27],[6,47],[7,7],[7,30],[7,47],[8,2],[8,17],[8,32],[8,43],[8,54],
-    [9,6],[9,18],[9,30],[9,42],[9,54],[10,5],[10,17],[10,28],[10,40],[10,52],
-    [11,3],[11,16],[11,29],[11,41],[11,53],[12,6],[12,18],[12,31],[12,43],[12,55],
-    [13,7],[13,19],[13,31],[13,44],[13,56],[14,8],[14,20],[14,32],[14,44],[14,56],
-    [15,8],[15,20],[15,31],[15,43],[15,55],[16,7],[16,19],[16,31],[16,43],[16,55],
-    [17,7],[17,18],[17,30],[17,42],[17,54],[18,6],[18,18],[18,30],[18,42],[18,54],
-    [19,9],[19,24],[19,39],[19,53],[20,7],[20,21],[20,36],[20,51],
-    [21,6],[21,20],[21,34],[21,49],[22,4],[22,18],[22,31],[22,46],[22,59],
-    [23,13],[23,28],[23,42],[23,57]
-  ],
-  sunday: [
-    [5,25],[5,45],[6,5],[6,25],[6,46],[7,6],[7,26],[7,47],[8,8],[8,29],[8,50],
-    [9,12],[9,33],[9,48],[10,3],[10,17],[10,33],[10,48],[11,2],[11,17],[11,32],[11,47],
-    [12,3],[12,18],[12,33],[12,49],[13,4],[13,19],[13,34],[13,49],
-    [14,4],[14,19],[14,34],[14,49],[15,4],[15,19],[15,34],[15,49],
-    [16,3],[16,17],[16,32],[16,47],[17,2],[17,17],[17,32],[17,47],
-    [18,2],[18,16],[18,31],[18,46],[19,1],[19,16],[19,31],[19,46],
-    [20,0],[20,15],[20,30],[20,45],[21,1],[21,17],[21,31],[21,46],
-    [22,0],[22,14],[22,29],[22,43],[22,58],[23,12],[23,27],[23,42],[23,56]
-  ]
-};
-
-function getTodayTimetable() {
-  const d = new Date().getDay();
-  if (d === 0) return TT.sunday;
-  if (d === 6) return TT.saturday;
-  return TT.weekday;
-}
-function pad(n) { return String(n).padStart(2,'0'); }
-function fmt(t) {
-  let h = Math.floor(t / 60) % 24;
-  const m = Math.floor(t % 60);
-  const ampm = h < 12 ? 'am' : 'pm';
-  h = h % 12 || 12;
-  return `${h}:${pad(m)}${ampm}`;
-}
-function nowMins() { const n=new Date(); return n.getHours()*60+n.getMinutes()+n.getSeconds()/60; }
-function tfl(p) { return `https://api.tfl.gov.uk${p}${p.includes('?')?'&':'?'}app_key=${API_KEY}`; }
-
-// ─── WEATHER ──────────────────────────────────────────
-async function loadWeather() {
-  try {
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${OWM_LAT}&lon=${OWM_LON}&units=metric&appid=${OWM_KEY}`);
-    if (!res.ok) throw new Error('weather fetch failed');
-    weatherData = await res.json();
-    renderWeather();
-  } catch(e) {
-    document.getElementById('weatherStrip').innerHTML =
-      `<div class="weather-loading" style="color:var(--muted)">weather unavailable</div>`;
+// ─── WEATHER (Open-Meteo, no key needed) ──────────────
+async function loadWeather(){
+  try{
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${WX_LAT}&longitude=${WX_LON}&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,precipitation,rain,showers,snowfall&timezone=Europe%2FLondon`;
+    const res=await fetch(url);
+    if(!res.ok) throw new Error('wx fetch fail');
+    const d=await res.json();
+    renderWeather(d.current);
+  }catch(e){
+    document.getElementById('weatherStrip').innerHTML=`<div class="weather-loading" style="color:var(--muted)">weather unavailable</div>`;
   }
 }
-
-function renderWeather() {
-  const el = document.getElementById('weatherStrip');
-  if (!weatherData) return;
-  const w = weatherData;
-  const temp = Math.round(w.main.temp);
-  const feels = Math.round(w.main.feels_like);
-  const desc = w.weather[0].description;
-  const mainW = w.weather[0].main.toLowerCase();
-  const windKph = Math.round((w.wind?.speed || 0) * 3.6);
-  const icon = weatherIcon(w.weather[0].icon, mainW);
-
-  // Determine tags and extra prep time
-  const tags = [];
-  weatherPrepExtra = 0;
-  const isRain = ['rain','drizzle','thunderstorm'].includes(mainW);
-  const isSnow = mainW === 'snow';
-
-  if (isRain || isSnow) {
-    tags.push(`<span class="weather-tag rain">${isSnow ? '🌨 snow' : '☔ rain'}</span>`);
-    weatherPrepExtra += 2; // umbrella/coat
-  }
-  if (temp <= 5) {
-    tags.push(`<span class="weather-tag cold">🧥 cold</span>`);
-    if (!isRain && !isSnow) weatherPrepExtra += 1; // coat
-  }
-  if (windKph >= 35) {
-    tags.push(`<span class="weather-tag wind">💨 ${windKph}km/h</span>`);
-  }
-  if (!isRain && !isSnow && temp > 5) {
-    tags.push(`<span class="weather-tag clear">dry</span>`);
-  }
-
-  const prepNote = weatherPrepExtra > 0
-    ? `<span class="weather-prep">+${weatherPrepExtra} min prep</span>`
-    : '';
-
-  el.innerHTML = `
-    <div class="weather-left">
-      <span class="weather-icon">${icon}</span>
-      <span class="weather-temp">${temp}°</span>
-      <span class="weather-desc">${desc}${feels !== temp ? ` · feels ${feels}°` : ''}</span>
-    </div>
-    <div class="weather-right">
-      ${tags.join('')}
-      ${prepNote}
-    </div>`;
+function renderWeather(c){
+  const el=document.getElementById('weatherStrip');
+  if(!c)return;
+  const temp=Math.round(c.temperature_2m), feels=Math.round(c.apparent_temperature);
+  const wind=Math.round(c.wind_speed_10m);
+  const rain=c.rain>0||c.showers>0, snow=c.snowfall>0;
+  const wmo=c.weather_code;
+  const{icon,desc}=wmoLookup(wmo);
+  const tags=[];
+  weatherPrepExtra=0;
+  if(rain||snow){tags.push(`<span class="weather-tag rain">${snow?'🌨 snow':'☔ rain'}</span>`);weatherPrepExtra+=2;}
+  if(temp<=5){tags.push(`<span class="weather-tag cold">🧥 cold</span>`);if(!rain&&!snow)weatherPrepExtra+=1;}
+  if(wind>=35){tags.push(`<span class="weather-tag wind">💨 ${wind}km/h</span>`);}
+  if(!rain&&!snow&&temp>5){tags.push(`<span class="weather-tag clear">dry</span>`);}
+  const prepNote=weatherPrepExtra>0?`<span class="weather-prep">+${weatherPrepExtra} min prep</span>`:'';
+  el.innerHTML=`<div class="weather-left"><span class="weather-icon">${icon}</span><span class="weather-temp">${temp}°</span><span class="weather-desc">${desc}${feels!==temp?' · feels '+feels+'°':''}</span></div><div class="weather-right">${tags.join('')}${prepNote}</div>`;
+}
+function wmoLookup(code){
+  if(code<=1)return{icon:'☀️',desc:'clear'};if(code<=3)return{icon:'⛅',desc:'partly cloudy'};
+  if(code<=48)return{icon:'🌫️',desc:'fog'};if(code<=57)return{icon:'🌦️',desc:'drizzle'};
+  if(code<=67)return{icon:'🌧️',desc:'rain'};if(code<=77)return{icon:'🌨️',desc:'snow'};
+  if(code<=82)return{icon:'🌧️',desc:'showers'};if(code<=86)return{icon:'🌨️',desc:'snow showers'};
+  if(code>=95)return{icon:'⛈️',desc:'thunderstorm'};return{icon:'🌤️',desc:'overcast'};
 }
 
-function weatherIcon(iconCode, main) {
-  const map = {
-    'clear': '☀️', 'clouds': '☁️', 'rain': '🌧️', 'drizzle': '🌦️',
-    'thunderstorm': '⛈️', 'snow': '🌨️', 'mist': '🌫️', 'fog': '🌫️',
-    'haze': '🌫️', 'smoke': '🌫️', 'dust': '🌫️'
-  };
-  return map[main] || '🌤️';
+// ─── LINE STATUS (expandable) ─────────────────────────
+let lineBannerExpanded=false;
+async function loadLineStatus(){
+  try{
+    const res=await fetch(tfl('/Line/186/Status'));
+    if(!res.ok) throw new Error('line status fail');
+    renderLineStatus(await res.json());
+  }catch(e){document.getElementById('lineBanner').innerHTML='';}
 }
-
-// ─── LINE STATUS / DIVERSIONS ──────────────────────────
-async function loadLineStatus() {
-  try {
-    const res = await fetch(tfl('/Line/186/Status'));
-    if (!res.ok) throw new Error('line status fetch failed');
-    const data = await res.json();
-    renderLineStatus(data);
-  } catch(e) {
-    document.getElementById('lineBanner').innerHTML = '';
-  }
-}
-
-function renderLineStatus(data) {
-  const el = document.getElementById('lineBanner');
-  if (!data || !data.length) { el.innerHTML = ''; return; }
-
-  const line = data[0];
-  const statuses = line.lineStatuses || [];
-  if (!statuses.length) { el.innerHTML = ''; return; }
-
-  // Find worst status
-  const severityOrder = { 'Good Service': 0, 'Minor Delays': 1, 'Severe Delays': 2,
-    'Part Closure': 3, 'Planned Closure': 3, 'Service Closed': 4,
-    'Part Suspended': 3, 'Suspended': 4, 'Reduced Service': 1,
-    'Bus Service': 1, 'Diverted': 2 };
-
-  let worst = statuses[0];
-  for (const s of statuses) {
-    if ((severityOrder[s.statusSeverityDescription] || 0) > (severityOrder[worst.statusSeverityDescription] || 0)) {
-      worst = s;
-    }
-  }
-
-  const sev = worst.statusSeverityDescription || 'Unknown';
-  const reason = worst.reason || '';
-
-  if (sev === 'Good Service') {
-    el.innerHTML = ''; // don't clutter UI for good service
-    return;
-  }
-
-  let bannerCls, icon;
-  const sevLower = sev.toLowerCase();
-  if (sevLower.includes('severe') || sevLower.includes('suspend') || sevLower.includes('closed')) {
-    bannerCls = 'lb-bad'; icon = '🚫';
-  } else if (sevLower.includes('divert') || sevLower.includes('part') || sevLower.includes('delay') || sevLower.includes('reduced')) {
-    bannerCls = 'lb-warn'; icon = '⚠️';
-  } else {
-    bannerCls = 'lb-info'; icon = 'ℹ️';
-  }
-
-  // Truncate reason for display
-  const shortReason = reason.length > 150 ? reason.slice(0, 147) + '…' : reason;
-
-  el.innerHTML = `<div class="line-banner ${bannerCls}">
-    <div class="lb-icon">${icon}</div>
-    <div class="lb-body">
-      <div class="lb-title">186: ${sev}</div>
-      ${shortReason ? `<div class="lb-detail">${shortReason}</div>` : ''}
-    </div>
+function renderLineStatus(data){
+  const el=document.getElementById('lineBanner');
+  if(!data||!data.length){el.innerHTML='';return;}
+  const statuses=data[0].lineStatuses||[];
+  if(!statuses.length){el.innerHTML='';return;}
+  const sevOrder={'Good Service':0,'Minor Delays':1,'Reduced Service':1,'Bus Service':1,'Severe Delays':2,'Diverted':2,'Part Closure':3,'Planned Closure':3,'Part Suspended':3,'Suspended':4,'Service Closed':4};
+  let worst=statuses[0];
+  for(const s of statuses){if((sevOrder[s.statusSeverityDescription]||0)>(sevOrder[worst.statusSeverityDescription]||0))worst=s;}
+  const sev=worst.statusSeverityDescription||'Unknown';
+  const reason=worst.reason||'';
+  if(sev==='Good Service'){el.innerHTML='';return;}
+  let bannerCls,icon;
+  const sl=sev.toLowerCase();
+  if(sl.includes('severe')||sl.includes('suspend')||sl.includes('closed')){bannerCls='lb-bad';icon='🚫';}
+  else if(sl.includes('divert')||sl.includes('part')||sl.includes('delay')||sl.includes('reduced')||sl.includes('special')){bannerCls='lb-warn';icon='⚠️';}
+  else{bannerCls='lb-info';icon='ℹ️';}
+  lineBannerExpanded=false;
+  el.innerHTML=`<div class="line-banner ${bannerCls}" onclick="toggleLineBanner()">
+    <div class="lb-header"><div class="lb-header-left"><div class="lb-icon">${icon}</div><div class="lb-title">186: ${sev}</div></div><div class="lb-chevron" id="lbChevron">▼</div></div>
+    ${reason?`<div class="lb-detail" id="lbDetail">${reason}</div>`:''}
   </div>`;
 }
-
-// ─── HISTORICAL RELIABILITY ──────────────────────────
-const HISTORY_KEY = 'bus186_history';
-const HISTORY_MIN_SAMPLES = 4;
-const HISTORY_MAX_AGE_DAYS = 30;
-
-function loadHistory() {
-  try {
-    return JSON.parse(localStorage.getItem(HISTORY_KEY) || '{}');
-  } catch { return {}; }
+function toggleLineBanner(){
+  const detail=document.getElementById('lbDetail');
+  const chevron=document.getElementById('lbChevron');
+  if(!detail)return;
+  lineBannerExpanded=!lineBannerExpanded;
+  detail.classList.toggle('expanded',lineBannerExpanded);
+  chevron.classList.toggle('open',lineBannerExpanded);
 }
 
-function saveHistory(h) {
-  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(h)); } catch {}
-}
-
-function historyKey(schedSlot) {
-  // Key by day-of-week + scheduled time for patterns
-  const dow = new Date().getDay();
-  return `${dow}_${Math.round(schedSlot)}`;
-}
-
-function recordBusHistory(entries) {
-  const h = loadHistory();
-  const now = Date.now();
-  const cutoff = now - HISTORY_MAX_AGE_DAYS * 86400000;
-
-  for (const entry of entries) {
-    if (entry.tracking === 'scheduled') continue;
-    if (entry.schedSlot === null || entry.busDelay === null) continue;
-    const key = historyKey(entry.schedSlot);
-    if (!h[key]) h[key] = [];
-    // Don't double-record within same minute window
-    const recent = h[key].find(r => Math.abs(r.ts - now) < 120000);
-    if (recent) continue;
-    h[key].push({ delay: entry.busDelay, ts: now });
-    // Prune old entries
-    h[key] = h[key].filter(r => r.ts > cutoff).slice(-20);
+// ─── HISTORICAL RELIABILITY ───────────────────────────
+const HIST_KEY='bus186_history',HIST_MIN=4,HIST_MAX_DAYS=30;
+function loadHistory(){try{return JSON.parse(localStorage.getItem(HIST_KEY)||'{}');}catch{return{};}}
+function saveHistory(h){try{localStorage.setItem(HIST_KEY,JSON.stringify(h));}catch{}}
+function histKey(slot){return`${new Date().getDay()}_${Math.round(slot)}`;}
+function recordBusHistory(entries){
+  const h=loadHistory(),now=Date.now(),cutoff=now-HIST_MAX_DAYS*86400000;
+  for(const e of entries){
+    if(e.tracking==='scheduled'||e.schedSlot===null||e.busDelay===null)continue;
+    const k=histKey(e.schedSlot);if(!h[k])h[k]=[];
+    if(h[k].find(r=>Math.abs(r.ts-now)<120000))continue;
+    h[k].push({delay:e.busDelay,ts:now});
+    h[k]=h[k].filter(r=>r.ts>cutoff).slice(-20);
   }
   saveHistory(h);
 }
-
-function getHistoryStats(schedSlot) {
-  if (schedSlot === null) return null;
-  const h = loadHistory();
-  const key = historyKey(schedSlot);
-  const records = (h[key] || []).filter(r => r.ts > Date.now() - HISTORY_MAX_AGE_DAYS * 86400000);
-  if (records.length < HISTORY_MIN_SAMPLES) return null;
-  const delays = records.map(r => r.delay);
-  const avg = delays.reduce((a, b) => a + b, 0) / delays.length;
-  const max = Math.max(...delays);
-  const min = Math.min(...delays);
-  return { avg: Math.round(avg * 10) / 10, max, min, n: records.length };
+function getHistoryStats(slot){
+  if(slot===null)return null;
+  const h=loadHistory(),k=histKey(slot);
+  const recs=(h[k]||[]).filter(r=>r.ts>Date.now()-HIST_MAX_DAYS*86400000);
+  if(recs.length<HIST_MIN)return null;
+  const delays=recs.map(r=>r.delay),avg=delays.reduce((a,b)=>a+b,0)/delays.length;
+  return{avg:Math.round(avg*10)/10,n:recs.length};
+}
+function historyLabel(s){
+  if(!s)return'';
+  if(Math.abs(s.avg)<1)return`reliable (${s.n} trips)`;
+  return s.avg>0?`usually +${Math.round(s.avg)} late (${s.n} trips)`:`usually ${Math.round(s.avg)} early (${s.n} trips)`;
 }
 
-function historyLabel(stats) {
-  if (!stats) return '';
-  const avg = stats.avg;
-  if (Math.abs(avg) < 1) return `reliable (${stats.n} trips)`;
-  if (avg > 0) return `usually +${Math.round(avg)} late (${stats.n} trips)`;
-  return `usually ${Math.round(avg)} early (${stats.n} trips)`;
+// ─── TRAINS ───────────────────────────────────────────
+function nextTrain(afterMins){
+  if(darwinTrains.length){for(const t of darwinTrains){if(!t.std)continue;const[h,m]=t.std.split(':').map(Number);const d=h*60+m;if(d>=afterMins)return d;}return null;}
+  if(darwinLoaded)return nextTrainFallback(afterMins);return null;
 }
-
-// ─── TRAIN FUNCTIONS ──────────────────────────────────
-function nextTrain(afterMins) {
-  if (darwinTrains.length) {
-    for (const t of darwinTrains) {
-      if (!t.std) continue;
-      const [h, m] = t.std.split(':').map(Number);
-      const depMins = h * 60 + m;
-      if (depMins >= afterMins) return depMins;
-    }
-    return null;
-  }
-  if (darwinLoaded) return nextTrainFromTimetable(afterMins);
-  return null;
-}
-
-function nextTrainFromTimetable(afterMins) {
-  const start = 5 * 60 + 30;
-  const end   = 23 * 60 + 50;
-  if (afterMins > end) return null;
-  const from = Math.max(afterMins, start);
-  const slot = Math.ceil(from / 20) * 20;
-  return slot <= end ? slot : null;
-}
+function nextTrainFallback(after){const s=330,e=1430;if(after>e)return null;const f=Math.max(after,s);const sl=Math.ceil(f/20)*20;return sl<=e?sl:null;}
 
 // ─── BUS MERGE ────────────────────────────────────────
-function mergeBuses(liveR, hwVehicles, nm) {
-  const MATCH_WINDOW = 5;
-  const LOOKAHEAD    = 90;
-  const tt = getTodayTimetable();
-
-  const ttSlots = [];
-  for (const [h, m] of tt) {
-    const slotMins = h * 60 + m;
-    if (slotMins < nm - 2) continue;
-    if (slotMins > nm + LOOKAHEAD) break;
-    ttSlots.push(slotMins);
-  }
-
-  const liveEntries = liveR
-    .filter(bus => nm + bus.timeToStation / 60 >= nm)
-    .map(bus => {
-      const depMins = nm + bus.timeToStation / 60;
-      const hwTTS   = hwVehicles[bus.vehicleId];
-      let tracking, jMins;
-      if (hwTTS != null) {
-        const diff = (hwTTS - bus.timeToStation) / 60;
-        if (diff > 5 && diff < 60) {
-          tracking = 'full'; jMins = Math.round(diff);
-        } else {
-          tracking = 'partial'; jMins = FALLBACK_JOURNEY;
-        }
-      } else {
-        tracking = 'partial'; jMins = FALLBACK_JOURNEY;
-      }
-
-      let schedSlot = null;
-      let busDelay = null;
-      let bestDiff = Infinity;
-      for (const slotMins of ttSlots) {
-        const diff = depMins - slotMins;
-        const absDiff = Math.abs(diff);
-        if (absDiff <= MATCH_WINDOW && absDiff < bestDiff) {
-          bestDiff = absDiff;
-          schedSlot = slotMins;
-          busDelay = Math.round(diff);
-        }
-      }
-
-      return {
-        depMins, jMins, tracking, live: true, bus,
-        schedSlot, busDelay
-      };
-    });
-
-  const claimedSlots = new Set();
-  for (const entry of liveEntries) {
-    if (entry.schedSlot !== null) claimedSlots.add(entry.schedSlot);
-  }
-
-  const schedEntries = [];
-  for (const slotMins of ttSlots) {
-    if (claimedSlots.has(slotMins)) continue;
-    const matched = liveEntries.some(e => Math.abs(e.depMins - slotMins) <= 3);
-    if (!matched) {
-      schedEntries.push({
-        depMins: slotMins, jMins: FALLBACK_JOURNEY,
-        tracking: 'scheduled', live: false, bus: null,
-        schedSlot: slotMins, busDelay: null
-      });
-    }
-  }
-
-  return [...liveEntries, ...schedEntries].sort((a, b) => a.depMins - b.depMins);
+function mergeBuses(liveR,hwV,nm){
+  const MW=5,LA=90,tt=getTodayTimetable();
+  const ttSlots=[];for(const[h,m]of tt){const s=h*60+m;if(s<nm-2)continue;if(s>nm+LA)break;ttSlots.push(s);}
+  const live=liveR.filter(b=>nm+b.timeToStation/60>=nm).map(b=>{
+    const dep=nm+b.timeToStation/60,hwTTS=hwV[b.vehicleId];
+    let tracking,jMins;
+    if(hwTTS!=null){const d=(hwTTS-b.timeToStation)/60;if(d>5&&d<60){tracking='full';jMins=Math.round(d);}else{tracking='partial';jMins=FALLBACK_JOURNEY;}}
+    else{tracking='partial';jMins=FALLBACK_JOURNEY;}
+    let schedSlot=null,busDelay=null,best=Infinity;
+    for(const s of ttSlots){const d=dep-s,a=Math.abs(d);if(a<=MW&&a<best){best=a;schedSlot=s;busDelay=Math.round(d);}}
+    return{depMins:dep,jMins,tracking,live:true,bus:b,schedSlot,busDelay};
+  });
+  const claimed=new Set();live.forEach(e=>{if(e.schedSlot!==null)claimed.add(e.schedSlot);});
+  const sched=[];
+  for(const s of ttSlots){if(claimed.has(s))continue;if(live.some(e=>Math.abs(e.depMins-s)<=3))continue;
+    sched.push({depMins:s,jMins:FALLBACK_JOURNEY,tracking:'scheduled',live:false,bus:null,schedSlot:s,busDelay:null});}
+  return[...live,...sched].sort((a,b)=>a.depMins-b.depMins);
 }
 
-let liveR       = [];
-let hwVehicles  = {};
-let mergedBuses = [];
-let selectedIdx = null;
+let liveR=[],hwVehicles={},mergedBuses=[],selectedIdx=null;
+function toggleScheduled(){showScheduled=!showScheduled;const b=document.getElementById('schedToggle');b.classList.toggle('active',showScheduled);b.textContent=showScheduled?'− sched':'+ sched';renderBuses();}
 
-function toggleScheduled() {
-  showScheduled = !showScheduled;
-  const btn = document.getElementById('schedToggle');
-  btn.classList.toggle('active', showScheduled);
-  btn.textContent = showScheduled ? '− sched' : '+ sched';
-  renderBuses();
+function calcForEntry(entry){
+  const nm=nowMins(),{depMins,jMins,tracking}=entry;
+  const shower=document.getElementById('shower').checked,trim=document.getElementById('trim').checked;
+  const poop=parseInt(document.getElementById('poopMins').value)||6,walk=parseInt(document.getElementById('walkMins').value)||4;
+  const arrHW=depMins+jMins,train=nextTrain(arrHW+BUFFER);
+  const showerMins=shower?SHOWER_MINS:0,trimMins=trim?TRIM_MINS:0;
+  const prepTotal=showerMins+trimMins+POST_SHW+poop+PACK+weatherPrepExtra;
+  const leaveAt=depMins-walk,startPrepBy=leaveAt-prepTotal,slack=Math.floor(startPrepBy-nm);
+  return{depMins,jMins,tracking,arrHW,train,showerMins,trimMins,prepTotal,leaveAt,startPrepBy,slack,walk};
 }
 
-function calcForEntry(entry) {
-  const nm      = nowMins();
-  const { depMins, jMins, tracking } = entry;
-  const shower  = document.getElementById('shower').checked;
-  const trim    = document.getElementById('trim').checked;
-  const poop    = parseInt(document.getElementById('poopMins').value) || 6;
-  const walk    = parseInt(document.getElementById('walkMins').value) || 4;
-  const arrHW   = depMins + jMins;
-  const train   = nextTrain(arrHW + BUFFER);
-  const showerMins = shower ? SHOWER_MINS : 0;
-  const trimMins   = trim   ? TRIM_MINS   : 0;
-  const prepTotal  = showerMins + trimMins + POST_SHW + poop + PACK + weatherPrepExtra;
-  const leaveAt    = depMins - walk;
-  const startPrepBy = leaveAt - prepTotal;
-  const slack      = Math.floor(startPrepBy - nm);
-  return { depMins, jMins, tracking, arrHW, train, showerMins, trimMins, prepTotal, leaveAt, startPrepBy, slack, walk };
-}
-
-async function loadBuses() {
-  const btn = document.getElementById('refreshBtn');
-  btn.classList.add('loading');
-  document.getElementById('busList').innerHTML =
-    '<div class="loading-msg" style="grid-column:1/-1"><span class="spinner"></span>fetching live data...</div>';
-
-  const prevDepMins = selectedIdx !== null && mergedBuses[selectedIdx] ? mergedBuses[selectedIdx].depMins : null;
-  selectedIdx = null;
-
-  try {
-    const [resR, resHW, resDarwin] = await Promise.all([
-      fetch(tfl(`/StopPoint/${STOP_R}/Arrivals`)),
-      fetch(tfl(`/StopPoint/${STOP_HW}/Arrivals`)),
-      fetch(DARWIN_URL).catch(() => null)
-    ]);
-    if (!resR.ok) throw new Error(`Stop R: HTTP ${resR.status}`);
-    if (!resHW.ok) throw new Error(`H&W: HTTP ${resHW.status}`);
-    const [dataR, dataHW] = await Promise.all([resR.json(), resHW.json()]);
-
-    darwinLoaded = true;
-    if (resDarwin && resDarwin.ok) {
-      const darwinData = await resDarwin.json();
-      darwinTrains = darwinData.trainServices || [];
-    } else {
-      darwinTrains = [];
-    }
-
-    liveR = dataR
-      .filter(a => String(a.lineId)==='186' || String(a.lineName)==='186')
-      .sort((a,b) => a.timeToStation - b.timeToStation);
-    hwVehicles = {};
-    dataHW
-      .filter(a => String(a.lineId)==='186' || String(a.lineName)==='186')
-      .forEach(a => { hwVehicles[a.vehicleId] = a.timeToStation; });
-
-    mergedBuses = mergeBuses(liveR, hwVehicles, nowMins());
-
-    // Record history for matched buses
+async function loadBuses(){
+  const btn=document.getElementById('refreshBtn');btn.classList.add('loading');
+  document.getElementById('busList').innerHTML='<div class="loading-msg" style="grid-column:1/-1"><span class="spinner"></span>fetching live data...</div>';
+  const prevDep=selectedIdx!==null&&mergedBuses[selectedIdx]?mergedBuses[selectedIdx].depMins:null;selectedIdx=null;
+  try{
+    const[resR,resHW,resD]=await Promise.all([fetch(tfl(`/StopPoint/${STOP_R}/Arrivals`)),fetch(tfl(`/StopPoint/${STOP_HW}/Arrivals`)),fetch(DARWIN_URL).catch(()=>null)]);
+    if(!resR.ok)throw new Error(`Stop R: HTTP ${resR.status}`);if(!resHW.ok)throw new Error(`H&W: HTTP ${resHW.status}`);
+    const[dataR,dataHW]=await Promise.all([resR.json(),resHW.json()]);
+    darwinLoaded=true;
+    if(resD&&resD.ok){const dd=await resD.json();darwinTrains=dd.trainServices||[];}else{darwinTrains=[];}
+    liveR=dataR.filter(a=>String(a.lineId)==='186'||String(a.lineName)==='186').sort((a,b)=>a.timeToStation-b.timeToStation);
+    hwVehicles={};dataHW.filter(a=>String(a.lineId)==='186'||String(a.lineName)==='186').forEach(a=>{hwVehicles[a.vehicleId]=a.timeToStation;});
+    mergedBuses=mergeBuses(liveR,hwVehicles,nowMins());
     recordBusHistory(mergedBuses);
-
-    if (prevDepMins !== null) {
-      let bestMatch = -1, bestDiff = Infinity;
-      mergedBuses.forEach((e, i) => {
-        const diff = Math.abs(e.depMins - prevDepMins);
-        if (diff < bestDiff && diff < 3) { bestDiff = diff; bestMatch = i; }
-      });
-      if (bestMatch >= 0) selectedIdx = bestMatch;
-    }
-
-    renderBuses();
-    renderResult();
-  } catch(e) {
-    document.getElementById('busList').innerHTML =
-      `<div class="loading-msg" style="grid-column:1/-1;color:var(--danger)">⚠ ${e.message}</div>`;
-  } finally {
-    btn.classList.remove('loading');
-  }
+    if(prevDep!==null){let bi=-1,bd=Infinity;mergedBuses.forEach((e,i)=>{const d=Math.abs(e.depMins-prevDep);if(d<bd&&d<3){bd=d;bi=i;}});if(bi>=0)selectedIdx=bi;}
+    renderBuses();renderResult();
+  }catch(e){document.getElementById('busList').innerHTML=`<div class="loading-msg" style="grid-column:1/-1;color:var(--danger)">⚠ ${e.message}</div>`;}
+  finally{btn.classList.remove('loading');}
 }
 
-function renderBuses() {
-  const nm = nowMins();
-  mergedBuses = mergeBuses(liveR, hwVehicles, nm);
-  const list = document.getElementById('busList');
-
-  if (!mergedBuses.length) {
-    list.innerHTML = '<div class="loading-msg" style="grid-column:1/-1">no 186 buses right now</div>';
-    return;
+function renderBuses(){
+  const nm=nowMins();mergedBuses=mergeBuses(liveR,hwVehicles,nm);
+  const list=document.getElementById('busList');
+  if(!mergedBuses.length){list.innerHTML='<div class="loading-msg" style="grid-column:1/-1">no 186 buses right now</div>';return;}
+  const walk=parseInt(document.getElementById('walkMins').value)||4;
+  const sm={full:{cls:'is-full',label:'full track'},partial:{cls:'is-partial',label:'partial'},scheduled:{cls:'is-sched',label:'scheduled'}};
+  const tracked=[],scheduled=[];
+  mergedBuses.forEach((e,i)=>{if(e.tracking==='scheduled')scheduled.push({entry:e,origIdx:i});else tracked.push({entry:e,origIdx:i});});
+  let html='';
+  if(!tracked.length){html+='<div class="loading-msg" style="grid-column:1/-1">no tracked buses — toggle scheduled ↗</div>';}
+  else{tracked.forEach(({entry,origIdx})=>{html+=renderBusCard(entry,origIdx,nm,walk,sm);});}
+  if(showScheduled&&scheduled.length){
+    html+=`<div class="sched-divider"><div class="sched-divider-line"></div><div class="sched-divider-label">scheduled (timetable only)</div><div class="sched-divider-line"></div></div>`;
+    scheduled.forEach(({entry,origIdx})=>{html+=renderBusCard(entry,origIdx,nm,walk,sm);});
   }
-
-  const walk = parseInt(document.getElementById('walkMins').value) || 4;
-  const statusMeta = {
-    full:      { cls: 'is-full',    label: 'full track' },
-    partial:   { cls: 'is-partial', label: 'partial' },
-    scheduled: { cls: 'is-sched',   label: 'scheduled' }
-  };
-
-  const tracked   = [];
-  const scheduled = [];
-  mergedBuses.forEach((entry, i) => {
-    if (entry.tracking === 'scheduled') scheduled.push({ entry, origIdx: i });
-    else tracked.push({ entry, origIdx: i });
-  });
-
-  let html = '';
-
-  if (!tracked.length) {
-    html += '<div class="loading-msg" style="grid-column:1/-1">no tracked buses — toggle scheduled ↗</div>';
-  } else {
-    tracked.forEach(({ entry, origIdx }) => {
-      html += renderBusCard(entry, origIdx, nm, walk, statusMeta);
-    });
-  }
-
-  if (showScheduled && scheduled.length) {
-    html += `<div class="sched-divider"><div class="sched-divider-line"></div><div class="sched-divider-label">scheduled (timetable only)</div><div class="sched-divider-line"></div></div>`;
-    scheduled.forEach(({ entry, origIdx }) => {
-      html += renderBusCard(entry, origIdx, nm, walk, statusMeta);
-    });
-  }
-
-  list.innerHTML = html;
+  list.innerHTML=html;
 }
 
-function renderBusCard(entry, idx, nm, walk, statusMeta) {
-  const { depMins, jMins, tracking, schedSlot, busDelay } = entry;
-  const minsAway = Math.round(depMins - nm);
-  const canCatch = minsAway >= walk;
-  const tight    = canCatch && (minsAway - walk) < 3;
-  const badgeCls = !canCatch ? 'badge-miss' : tight ? 'badge-tight' : 'badge-good';
-  const badgeLbl = !canCatch ? 'too soon'   : tight ? 'tight'       : 'ok';
-  const arrHW    = depMins + jMins;
-  const train    = nextTrain(arrHW + BUFFER);
-  const trainLabel = train ? `🚆 ${fmt(train)}` : '🚆 —';
-  const rideLabel  = tracking === 'full' ? `${jMins} min ride` : `~${jMins} min ride`;
-  const { cls: stCls, label: stLbl } = statusMeta[tracking];
-  const cardDim  = tracking === 'scheduled' ? 'is-sched-card' : '';
-  const uncatch  = !canCatch ? 'is-uncatchable' : '';
-  const sel      = selectedIdx === idx ? 'selected' : '';
-
-  // Delay indicator
-  let delayHtml = '';
-  if (tracking !== 'scheduled' && schedSlot !== null && busDelay !== null && Math.abs(busDelay) >= 1) {
-    if (busDelay > 0) {
-      delayHtml = `<div class="bus-delay"><span class="sched-time">${fmt(schedSlot)}</span> <span class="delay-amount">+${busDelay} late</span></div>`;
-    } else {
-      delayHtml = `<div class="bus-delay"><span class="sched-time">${fmt(schedSlot)}</span> <span class="early-amount">${busDelay} early</span></div>`;
-    }
+function renderBusCard(entry,idx,nm,walk,sm){
+  const{depMins,jMins,tracking,schedSlot,busDelay}=entry;
+  const minsAway=Math.round(depMins-nm),canCatch=minsAway>=walk,tight=canCatch&&(minsAway-walk)<3;
+  const bCls=!canCatch?'badge-miss':tight?'badge-tight':'badge-good';
+  const bLbl=!canCatch?'too soon':tight?'tight':'ok';
+  const arrHW=depMins+jMins,train=nextTrain(arrHW+BUFFER);
+  const trainLbl=train?`🚆 ${fmt(train)}`:'🚆 —';
+  const rideLbl=tracking==='full'?`${jMins} min ride`:`~${jMins} min ride`;
+  const{cls:stCls,label:stLbl}=sm[tracking];
+  const cardDim=tracking==='scheduled'?'is-sched-card':'';
+  const uncatch=!canCatch?'is-uncatchable':'';
+  const sel=selectedIdx===idx?'selected':'';
+  let delayHtml='';
+  if(tracking!=='scheduled'&&schedSlot!==null&&busDelay!==null&&Math.abs(busDelay)>=1){
+    delayHtml=busDelay>0?`<div class="bus-delay"><span class="sched-time">${fmt(schedSlot)}</span> <span class="delay-amount">+${busDelay} late</span></div>`:`<div class="bus-delay"><span class="sched-time">${fmt(schedSlot)}</span> <span class="early-amount">${busDelay} early</span></div>`;
   }
-
-  // Historical reliability
-  const stats = getHistoryStats(schedSlot);
-  const histHtml = stats ? `<div class="bus-history">${historyLabel(stats)}</div>` : '';
-
-  return `<div class="bus-item ${sel} ${cardDim} ${uncatch}" onclick="selectBus(${idx})">
-    <div class="bus-status ${stCls}"><span class="live-dot"></span>${stLbl}</div>
-    <div class="bus-time">${fmt(depMins)}</div>
-    ${delayHtml}
-    <div class="bus-sub">in ${minsAway} min</div>
-    <div class="bus-sub">${rideLabel}</div>
-    <div class="bus-train">${trainLabel}</div>
-    <div class="badge ${badgeCls}">${badgeLbl}</div>
-    ${histHtml}
-  </div>`;
+  const stats=getHistoryStats(schedSlot);
+  const histHtml=stats?`<div class="bus-history">${historyLabel(stats)}</div>`:'';
+  return`<div class="bus-item ${sel} ${cardDim} ${uncatch}" onclick="selectBus(${idx})"><div class="bus-status ${stCls}"><span class="live-dot"></span>${stLbl}</div><div class="bus-time">${fmt(depMins)}</div>${delayHtml}<div class="bus-sub">in ${minsAway} min</div><div class="bus-sub">${rideLbl}</div><div class="bus-train">${trainLbl}</div><div class="badge ${bCls}">${bLbl}</div>${histHtml}</div>`;
 }
 
-function selectBus(i) { selectedIdx = i; renderBuses(); renderResult(); }
+function selectBus(i){selectedIdx=i;renderBuses();renderResult();}
 
-function getTrainStatus(trainMins) {
-  if (!darwinTrains.length) return null;
-  for (const t of darwinTrains) {
-    if (!t.std) continue;
-    const [h, m] = t.std.split(':').map(Number);
-    const schedMins = h * 60 + m;
-    if (Math.abs(schedMins - trainMins) > 2) continue;
-    const etd = (t.etd || '').trim();
-    const cancelled = t.isCancelled || etd.toLowerCase() === 'cancelled';
-    let delayMins = 0, expMins = schedMins;
-    if (!cancelled && etd !== 'On time' && etd !== 'Delayed' && /^\d{2}:\d{2}$/.test(etd)) {
-      const [eh, em] = etd.split(':').map(Number);
-      expMins = eh * 60 + em;
-      delayMins = expMins - schedMins;
-    }
-    return { found: true, schedMins, expMins, delayMins, cancelled, onTime: !cancelled && etd === 'On time', platform: t.platform || null };
-  }
-  return { found: false };
+function getTrainStatus(trainMins){
+  if(!darwinTrains.length)return null;
+  for(const t of darwinTrains){if(!t.std)continue;const[h,m]=t.std.split(':').map(Number);const sM=h*60+m;if(Math.abs(sM-trainMins)>2)continue;
+    const etd=(t.etd||'').trim(),cancelled=t.isCancelled||etd.toLowerCase()==='cancelled';
+    let delayMins=0,expMins=sM;
+    if(!cancelled&&etd!=='On time'&&etd!=='Delayed'&&/^\d{2}:\d{2}$/.test(etd)){const[eh,em]=etd.split(':').map(Number);expMins=eh*60+em;delayMins=expMins-sM;}
+    return{found:true,schedMins:sM,expMins,delayMins,cancelled,onTime:!cancelled&&etd==='On time',platform:t.platform||null};}
+  return{found:false};
 }
 
-function renderResult() {
-  const panel = document.getElementById('resultPanel');
-  if (selectedIdx === null) {
-    panel.className = 'result-panel';
-    panel.innerHTML = '<div class="result-empty">tap a bus to see if you can sleep in</div>';
-    return;
+function renderResult(){
+  const panel=document.getElementById('resultPanel');
+  if(selectedIdx===null){panel.className='result-panel';panel.innerHTML='<div class="result-empty">tap a bus to see if you can sleep in</div>';return;}
+  const entry=mergedBuses[selectedIdx];if(!entry){selectedIdx=null;renderResult();return;}
+  const calc=calcForEntry(entry);const nm=nowMins();
+  const{depMins,jMins,tracking,arrHW,train,showerMins,trimMins,prepTotal,leaveAt,startPrepBy,slack,walk}=calc;
+  if(!train){panel.className='result-panel';panel.innerHTML=`<div class="result-empty" style="color:var(--muted)">${!darwinLoaded?'loading train times…':'no more trains today'}</div>`;return;}
+  const busDepMins=depMins-nm;
+  const slackCls=slack<0?'slack-miss':slack<5?'slack-tight':'slack-good';
+  const slackLbl=slack<0?`${Math.abs(slack)} min late — get up now!`:slack===0?'get up now':`${slack} min to spare`;
+  const prepLines=[];
+  if(showerMins)prepLines.push(`shower +${showerMins}`);if(trimMins)prepLines.push(`trim +${trimMins}`);
+  prepLines.push(`dressed +${POST_SHW}`,`poop +${parseInt(document.getElementById('poopMins').value)||6}`,`pack +${PACK}`);
+  if(weatherPrepExtra>0)prepLines.push(`weather +${weatherPrepExtra}`);
+  const rC={full:'var(--good)',partial:'var(--warn)',scheduled:'var(--muted)'};
+  const rL={full:'live',partial:'partial',scheduled:'sched'};
+  const rideNote=`${tracking==='full'?jMins:'~'+jMins} min <span style="color:${rC[tracking]};font-size:0.65rem">${rL[tracking]}</span>`;
+
+  let busDelayStep='';
+  if(entry.schedSlot!==null&&entry.busDelay!==null&&Math.abs(entry.busDelay)>=1){
+    const dC=entry.busDelay>0?'var(--warn)':'var(--good)';
+    const dL=entry.busDelay>0?`+${entry.busDelay} min late`:`${Math.abs(entry.busDelay)} min early`;
+    busDelayStep=`<div class="step"><div class="step-label" style="color:${dC}">↳ sched ${fmt(entry.schedSlot)}, running ${dL}</div><div class="step-val"></div></div>`;
   }
-  const entry = mergedBuses[selectedIdx];
-  if (!entry) { selectedIdx = null; renderResult(); return; }
+  const stats=getHistoryStats(entry.schedSlot);
+  let histStep=stats?`<div class="step"><div class="step-label" style="font-style:italic">📊 ${historyLabel(stats)}</div><div class="step-val"></div></div>`:'';
 
-  const calc = calcForEntry(entry);
-  const nm   = nowMins();
-  const { depMins, jMins, tracking, arrHW, train, showerMins, trimMins, prepTotal, leaveAt, startPrepBy, slack, walk } = calc;
-
-  if (!train) {
-    panel.className = 'result-panel';
-    const msg = !darwinLoaded ? 'loading train times…' : 'no more trains today';
-    panel.innerHTML = `<div class="result-empty" style="color:var(--muted)">${msg}</div>`;
-    return;
-  }
-
-  const busDepMins = depMins - nm;
-  const slackCls = slack < 0 ? 'slack-miss' : slack < 5 ? 'slack-tight' : 'slack-good';
-  const slackLbl = slack < 0
-    ? `${Math.abs(slack)} min late — get up now!`
-    : slack === 0 ? `get up now` : `${slack} min to spare`;
-
-  const prepLines = [];
-  if (showerMins) prepLines.push(`shower +${showerMins}`);
-  if (trimMins)   prepLines.push(`trim +${calc.trimMins || TRIM_MINS}`);
-  prepLines.push(`dressed +${POST_SHW}`, `poop +${parseInt(document.getElementById('poopMins').value)||6}`, `pack +${PACK}`);
-  if (weatherPrepExtra > 0) prepLines.push(`weather +${weatherPrepExtra}`);
-
-  const rideColors = { full: 'var(--good)', partial: 'var(--warn)', scheduled: 'var(--muted)' };
-  const rideLabels = { full: 'live', partial: 'partial', scheduled: 'sched' };
-  const rideNote = `${tracking === 'full' ? jMins : '~'+jMins} min <span style="color:${rideColors[tracking]};font-size:0.65rem">${rideLabels[tracking]}</span>`;
-
-  // Bus delay step
-  let busDelayStep = '';
-  if (entry.schedSlot !== null && entry.busDelay !== null && Math.abs(entry.busDelay) >= 1) {
-    const dColor = entry.busDelay > 0 ? 'var(--warn)' : 'var(--good)';
-    const dLabel = entry.busDelay > 0 ? `+${entry.busDelay} min late` : `${Math.abs(entry.busDelay)} min early`;
-    busDelayStep = `<div class="step"><div class="step-label" style="color:${dColor}">↳ sched ${fmt(entry.schedSlot)}, running ${dLabel}</div><div class="step-val"></div></div>`;
+  let suggestionHtml='';
+  if(document.getElementById('shower').checked&&slack<8){
+    const sugs=[{label:'10 min quicker shower',saving:10},{label:'5 min quicker shower',saving:5},{label:'skipping shower',saving:SHOWER_MINS}];
+    let found=null;for(const s of sugs){if(s.saving>showerMins)continue;const ns=slack+s.saving;if(ns>=0&&!found)found={...s,newSlack:ns};}
+    if(found){const isOk=found.newSlack>=5;const nw=fmt(startPrepBy+found.saving);
+      suggestionHtml=`<div class="suggestion ${isOk?'is-ok':''}"><div class="suggestion-icon">🚿</div><div class="suggestion-body"><div class="suggestion-title">${found.newSlack>=0?'Try '+found.label:'Still tight'}</div><div class="suggestion-detail">${found.newSlack>=0?`<strong>${found.label}</strong> → wake at <strong>${nw}</strong>, <strong>${found.newSlack} min</strong> spare`:`Even skipping shower you'd be <strong>${Math.abs(found.newSlack)} min short</strong>`}</div></div></div>`;
+    }else if(slack<0){suggestionHtml=`<div class="suggestion"><div class="suggestion-icon">⏭️</div><div class="suggestion-body"><div class="suggestion-title">Too late for this bus</div><div class="suggestion-detail">Even skipping the shower won't help — tap the next bus</div></div></div>`;}
   }
 
-  // History note for result
-  const stats = getHistoryStats(entry.schedSlot);
-  let histStep = '';
-  if (stats) {
-    histStep = `<div class="step"><div class="step-label" style="font-style:italic">📊 ${historyLabel(stats)}</div><div class="step-val"></div></div>`;
-  }
+  const ts=getTrainStatus(train);let tsHtml='';
+  if(ts===null){tsHtml=`<div class="train-status ts-loading"><div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div></div><div class="ts-right"><div class="ts-badge loading"><span class="spinner"></span> checking</div></div></div>`;}
+  else if(!ts.found){tsHtml=`<div class="train-status"><div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div></div><div class="ts-right"><div class="ts-badge loading">no live data</div></div></div>`;}
+  else if(ts.cancelled){tsHtml=`<div class="train-status ts-cancel"><div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div></div><div class="ts-right"><div class="ts-badge cancelled">cancelled</div></div></div>`;}
+  else{const dl=ts.delayMins,tc=dl<=0?'ts-ok':'ts-delay',bc=dl<=0?'on-time':'delayed';
+    const bl=ts.onTime?'on time':dl<-1?`${Math.abs(dl)} min early`:dl>0?`+${dl} min`:'on time';
+    const eH=dl>1?`<span class="ts-exp late"> exp ${fmt(ts.expMins)}</span>`:dl<-1?`<span class="ts-exp early"> exp ${fmt(ts.expMins)}</span>`:'';
+    const pH=ts.platform?`<div class="ts-platform">platform ${ts.platform}</div>`:'';
+    tsHtml=`<div class="train-status ${tc}"><div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span>${eH}</div></div><div class="ts-right"><div class="ts-badge ${bc}">${bl}</div>${pH}</div></div>`;}
 
-  // Shower suggestion
-  let suggestionHtml = '';
-  if (document.getElementById('shower').checked && slack < 8) {
-    const suggestions = [
-      { label: '10 min quicker shower', saving: 10 },
-      { label: '5 min quicker shower',  saving: 5  },
-      { label: 'skipping shower',       saving: SHOWER_MINS }
-    ];
-    let found = null;
-    for (const s of suggestions) {
-      if (s.saving > showerMins) continue;
-      const newSlack = slack + s.saving;
-      if (newSlack >= 0 && !found) found = { ...s, newSlack };
-    }
-    if (found) {
-      const isOk = found.newSlack >= 5;
-      const newWakeUp = fmt(startPrepBy + found.saving);
-      suggestionHtml = `<div class="suggestion ${isOk ? 'is-ok' : ''}">
-        <div class="suggestion-icon">🚿</div>
-        <div class="suggestion-body">
-          <div class="suggestion-title">${found.newSlack >= 0 ? 'Try ' + found.label : 'Still tight even skipping shower'}</div>
-          <div class="suggestion-detail">
-            ${found.newSlack >= 0
-              ? `<strong>${found.label}</strong> → wake up at <strong>${newWakeUp}</strong> instead, giving you <strong>${found.newSlack} min</strong> to spare`
-              : `Even skipping the shower you'd be <strong>${Math.abs(found.newSlack)} min short</strong> — aim for the next bus`
-            }
-          </div>
-        </div>
-      </div>`;
-    } else if (slack < 0) {
-      suggestionHtml = `<div class="suggestion">
-        <div class="suggestion-icon">⏭️</div>
-        <div class="suggestion-body">
-          <div class="suggestion-title">Too late for this bus</div>
-          <div class="suggestion-detail">Even skipping the shower won't be enough — tap the next bus to see your options</div>
-        </div>
-      </div>`;
-    }
-  }
-
-  // Train status
-  const ts = getTrainStatus(train);
-  let trainStatusHtml = '';
-  if (ts === null) {
-    trainStatusHtml = `<div class="train-status ts-loading">
-      <div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div></div>
-      <div class="ts-right"><div class="ts-badge loading"><span class="spinner"></span> checking</div></div>
-    </div>`;
-  } else if (!ts.found) {
-    trainStatusHtml = `<div class="train-status">
-      <div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div></div>
-      <div class="ts-right"><div class="ts-badge loading">no live data yet</div><div class="ts-platform">check closer to departure</div></div>
-    </div>`;
-  } else if (ts.cancelled) {
-    trainStatusHtml = `<div class="train-status ts-cancel">
-      <div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span></div></div>
-      <div class="ts-right"><div class="ts-badge cancelled">cancelled</div><div class="ts-platform" style="color:var(--danger)">catch the next one</div></div>
-    </div>`;
-  } else {
-    const delay = ts.delayMins;
-    const tsCls    = delay <= 0 ? 'ts-ok' : 'ts-delay';
-    const badgeCls2 = delay <= 0 ? 'on-time' : 'delayed';
-    const badgeLbl2 = ts.onTime ? 'on time' : delay < -1 ? `${Math.abs(delay)} min early` : delay > 0 ? `+${delay} min` : 'on time';
-    const expHtml  = delay > 1 ? `<span class="ts-exp late"> exp ${fmt(ts.expMins)}</span>` : delay < -1 ? `<span class="ts-exp early"> exp ${fmt(ts.expMins)}</span>` : '';
-    const platformHtml = ts.platform ? `<div class="ts-platform">platform ${ts.platform}</div>` : '';
-    trainStatusHtml = `<div class="train-status ${tsCls}">
-      <div class="ts-left"><div class="ts-dest">Euston → Milton Keynes Central</div><div class="ts-time"><span class="ts-sched">${fmt(train)}</span>${expHtml}</div></div>
-      <div class="ts-right"><div class="ts-badge ${badgeCls2}">${badgeLbl2}</div>${platformHtml}</div>
-    </div>`;
-  }
-
-  panel.className = 'result-panel active';
-  panel.innerHTML = `
-    <div class="result-hero">
-      <div>
-        <div class="result-lbl">wake up by</div>
-        <div class="result-big">${fmt(startPrepBy)}</div>
-      </div>
-      <div class="verdict ${slackCls}">${slackLbl}</div>
-    </div>
+  panel.className='result-panel active';
+  panel.innerHTML=`<div class="result-hero"><div><div class="result-lbl">wake up by</div><div class="result-big">${fmt(startPrepBy)}</div></div><div class="verdict ${slackCls}">${slackLbl}</div></div>
     <div class="steps">
-      <div class="step">
-        <div class="step-label">⏰ wake up &amp; prep<br><em style="font-size:0.62rem;color:var(--muted)">${prepLines.join(' · ')}</em></div>
-        <div class="step-val dim">+${prepTotal} min</div>
-      </div>
-      <div class="step">
-        <div class="step-label">🚶 leave home</div>
-        <div class="step-val hi">${fmt(leaveAt)}</div>
-      </div>
-      <div class="step">
-        <div class="step-label">🚌 board 186 at stop R</div>
-        <div class="step-val">${fmt(depMins)} <span style="color:var(--muted);font-size:0.7rem">(in ${Math.round(busDepMins)} min)</span></div>
-      </div>
-      ${busDelayStep}
-      ${histStep}
-      <div class="step">
-        <div class="step-label">📍 arrive H&amp;W</div>
-        <div class="step-val">${fmt(arrHW)} <span style="color:var(--muted);font-size:0.7rem">(+${rideNote})</span></div>
-      </div>
+      <div class="step"><div class="step-label">⏰ wake up &amp; prep<br><em style="font-size:0.62rem;color:var(--muted)">${prepLines.join(' · ')}</em></div><div class="step-val dim">+${prepTotal} min</div></div>
+      <div class="step"><div class="step-label">🚶 leave home</div><div class="step-val hi">${fmt(leaveAt)}</div></div>
+      <div class="step"><div class="step-label">🚌 board 186 at stop R</div><div class="step-val">${fmt(depMins)} <span style="color:var(--muted);font-size:0.7rem">(in ${Math.round(busDepMins)} min)</span></div></div>
+      ${busDelayStep}${histStep}
+      <div class="step"><div class="step-label">📍 arrive H&amp;W</div><div class="step-val">${fmt(arrHW)} <span style="color:var(--muted);font-size:0.7rem">(+${rideNote})</span></div></div>
       <div class="step-divider"></div>
-      <div class="step">
-        <div class="step-label">🚆 train departs H&amp;W</div>
-        <div class="step-val hi">${fmt(train)}</div>
-      </div>
-    </div>
-    ${trainStatusHtml}
-    ${suggestionHtml}`;
+      <div class="step"><div class="step-label">🚆 train departs H&amp;W</div><div class="step-val hi">${fmt(train)}</div></div>
+    </div>${tsHtml}${suggestionHtml}`;
 }
 
-document.querySelectorAll('input').forEach(el => {
-  el.addEventListener('change', () => { renderBuses(); renderResult(); });
-  el.addEventListener('input',  () => { renderResult(); });
-});
+document.querySelectorAll('input').forEach(el=>{el.addEventListener('change',()=>{renderBuses();renderResult();});el.addEventListener('input',()=>{renderResult();});});
 
-// Initial load
-loadBuses();
-loadWeather();
-loadLineStatus();
+loadBuses();loadWeather();loadLineStatus();
+setInterval(loadBuses,60000);
+setInterval(loadWeather,600000);
+setInterval(loadLineStatus,120000);
 
-// Refresh intervals
-setInterval(loadBuses, 60000);
-setInterval(loadWeather, 600000);    // weather every 10 min
-setInterval(loadLineStatus, 120000); // line status every 2 min
-
-function updateClock() {
-  const n = new Date();
-  let h = n.getHours(), m = n.getMinutes(), s = n.getSeconds();
-  const ampm = h < 12 ? 'am' : 'pm';
-  h = h % 12 || 12;
-  document.getElementById('clock').textContent = h + ':' + pad(m) + ':' + pad(s) + ampm;
-}
-updateClock();
-setInterval(updateClock, 1000);
+function updateClock(){const n=new Date();let h=n.getHours(),m=n.getMinutes(),s=n.getSeconds();const ap=h<12?'am':'pm';h=h%12||12;document.getElementById('clock').textContent=h+':'+pad(m)+':'+pad(s)+ap;}
+updateClock();setInterval(updateClock,1000);
 </script>
 
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW failed:', e));
-  });
-}
-</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW:',e));});}</script>
 
 </body>
 </html>
