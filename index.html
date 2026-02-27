@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -26,142 +27,129 @@
   #clock { font-family: 'Fraunces', serif; font-size: 2.6rem; font-weight: 300; color: var(--text); line-height: 1; letter-spacing: -0.03em; }
   .header-sub { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.06em; margin-top: 3px; }
 
-  /* Snooze hero */
-  .snooze-hero { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; transition: border-color 0.3s, background 0.3s; }
-  .snooze-hero.has-time { border-color: rgba(200,240,96,0.25); background: rgba(200,240,96,0.03); }
-  .snooze-hero.urgent { border-color: rgba(240,96,96,0.35); background: rgba(240,96,96,0.04); }
-  .snooze-left { display: flex; flex-direction: column; gap: 2px; }
-  .snooze-label { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
-  .snooze-time { font-family: 'Fraunces', serif; font-size: 2.4rem; font-weight: 700; line-height: 1; color: var(--accent); transition: color 0.3s; }
-  .snooze-hero.urgent .snooze-time { color: var(--danger); }
-  .snooze-sub { font-size: 0.62rem; color: var(--muted); margin-top: 3px; line-height: 1.4; }
-  .snooze-sub strong { color: var(--text); font-weight: 500; }
-  .snooze-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-  .snooze-alarm { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.05em; }
-  .snooze-alarm strong { color: var(--accent); font-weight: 500; font-size: 0.72rem; }
-  .snooze-hero.urgent .snooze-alarm strong { color: var(--danger); }
-  .snooze-verdict { font-size: 0.68rem; font-weight: 500; line-height: 1.3; }
-  .snooze-verdict.sv-good  { color: var(--good); }
-  .snooze-verdict.sv-tight { color: var(--warn); }
-  .snooze-verdict.sv-miss  { color: var(--danger); }
-  .snooze-empty { font-size: 0.62rem; color: var(--muted); text-align: center; padding: 4px 0; }
+/* Config */
+.config-row { display: flex; gap: 6px; }
+.config-block { background: var(–surface); border: 1px solid var(–border); border-radius: 2px; padding: 7px 10px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.cfg-label { font-size: 0.54rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(–muted); }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; }
+.toggle-name { font-size: 0.7rem; }
+.toggle-mins { font-size: 0.58rem; color: var(–muted); }
+.switch { position: relative; width: 32px; height: 17px; cursor: pointer; flex-shrink: 0; }
+.switch input { display: none; }
+.slider { position: absolute; inset: 0; background: #222; border-radius: 2px; transition: 0.15s; }
+.slider:before { content: ‘’; position: absolute; width: 11px; height: 11px; left: 3px; top: 3px; background: var(–muted); border-radius: 1px; transition: 0.15s; }
+input:checked + .slider { background: rgba(200,240,96,0.12); }
+input:checked + .slider:before { transform: translateX(15px); background: var(–accent); }
+.num-row { display: flex; align-items: center; justify-content: space-between; }
+.num-name { font-size: 0.7rem; }
+.num-ctrl { display: flex; align-items: center; gap: 4px; }
+.num-input { background: #1a1a1a; border: 1px solid var(–border); color: var(–text); font-family: ‘DM Mono’, monospace; font-size: 0.72rem; padding: 2px 0; border-radius: 2px; width: 36px; text-align: center; outline: none; }
+.num-input:focus { border-color: var(–accent); }
+.num-unit { font-size: 0.58rem; color: var(–muted); }
 
-  /* Config */
-  .config-row { display: flex; gap: 6px; }
-  .config-block { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 7px 10px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
-  .cfg-label { font-size: 0.54rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .toggle-row { display: flex; align-items: center; justify-content: space-between; }
-  .toggle-name { font-size: 0.7rem; }
-  .toggle-mins { font-size: 0.58rem; color: var(--muted); }
-  .switch { position: relative; width: 32px; height: 17px; cursor: pointer; flex-shrink: 0; }
-  .switch input { display: none; }
-  .slider { position: absolute; inset: 0; background: #222; border-radius: 2px; transition: 0.15s; }
-  .slider:before { content: ''; position: absolute; width: 11px; height: 11px; left: 3px; top: 3px; background: var(--muted); border-radius: 1px; transition: 0.15s; }
-  input:checked + .slider { background: rgba(200,240,96,0.12); }
-  input:checked + .slider:before { transform: translateX(15px); background: var(--accent); }
-  .num-row { display: flex; align-items: center; justify-content: space-between; }
-  .num-name { font-size: 0.7rem; }
-  .num-ctrl { display: flex; align-items: center; gap: 4px; }
-  .num-input { background: #1a1a1a; border: 1px solid var(--border); color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.72rem; padding: 2px 0; border-radius: 2px; width: 36px; text-align: center; outline: none; }
-  .num-input:focus { border-color: var(--accent); }
-  .num-unit { font-size: 0.58rem; color: var(--muted); }
+/* Refresh row */
+.refresh-row { display: flex; justify-content: space-between; align-items: center; }
+.section-label { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(–muted); }
+.refresh-right { display: flex; align-items: center; gap: 6px; }
+.refresh-btn { font-family: ‘DM Mono’, monospace; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; background: none; border: 1px solid var(–border); color: var(–muted); padding: 5px 9px; border-radius: 2px; cursor: pointer; transition: all 0.15s; }
+.refresh-btn:hover, .refresh-btn.loading { border-color: var(–accent); color: var(–accent); }
+.sched-toggle { font-family: ‘DM Mono’, monospace; font-size: 0.54rem; letter-spacing: 0.06em; text-transform: uppercase; background: none; border: 1px solid var(–border); color: var(–muted); padding: 5px 8px; border-radius: 2px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.sched-toggle:hover { border-color: #444; color: var(–text); }
+.sched-toggle.active { border-color: rgba(200,240,96,0.3); color: var(–accent); background: rgba(200,240,96,0.04); }
+.dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(–accent); margin-right: 5px; animation: pulse 2s ease-in-out infinite; vertical-align: middle; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  /* Refresh row */
-  .refresh-row { display: flex; justify-content: space-between; align-items: center; }
-  .section-label { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .refresh-right { display: flex; align-items: center; gap: 6px; }
-  .refresh-btn { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; background: none; border: 1px solid var(--border); color: var(--muted); padding: 5px 9px; border-radius: 2px; cursor: pointer; transition: all 0.15s; }
-  .refresh-btn:hover, .refresh-btn.loading { border-color: var(--accent); color: var(--accent); }
-  .sched-toggle { font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.06em; text-transform: uppercase; background: none; border: 1px solid var(--border); color: var(--muted); padding: 5px 8px; border-radius: 2px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-  .sched-toggle:hover { border-color: #444; color: var(--text); }
-  .sched-toggle.active { border-color: rgba(200,240,96,0.3); color: var(--accent); background: rgba(200,240,96,0.04); }
-  .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-right: 5px; animation: pulse 2s ease-in-out infinite; vertical-align: middle; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+/* Bus grid */
+.bus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+.bus-item { background: var(–surface); border: 1px solid var(–border); border-radius: 2px; padding: 10px 6px 9px; cursor: pointer; transition: border-color 0.15s, opacity 0.2s; text-align: center; }
+.bus-item:hover { border-color: #444; }
+.bus-item.selected { border-color: var(–accent); background: rgba(200,240,96,0.04); }
+.bus-item.is-sched-card { opacity: 0.45; border-style: dashed; }
+.bus-item.is-sched-card:hover { opacity: 0.7; }
+.bus-item.is-sched-card.selected { opacity: 0.8; }
+.bus-time { font-size: 1.15rem; font-weight: 500; letter-spacing: -0.02em; }
+.bus-sub { font-size: 0.58rem; color: var(–muted); margin-top: 2px; }
+.bus-train { font-size: 0.62rem; color: var(–accent); margin-top: 4px; opacity: 0.9; letter-spacing: 0.01em; }
+.badge { font-size: 0.52rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 5px; border-radius: 2px; display: inline-block; margin-top: 5px; }
+.badge-good  { color: var(–good);   background: rgba(96,212,160,0.1); }
+.badge-tight { color: var(–warn);   background: rgba(240,160,64,0.1); }
+.badge-miss  { color: var(–danger); background: rgba(240,96,96,0.1); }
+.loading-msg { text-align: center; padding: 14px; color: var(–muted); font-size: 0.7rem; }
+.spinner { display: inline-block; width: 10px; height: 10px; border: 2px solid var(–border); border-top-color: var(–accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 5px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.sched-divider { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+.sched-divider-line { flex: 1; height: 1px; background: var(–border); }
+.sched-divider-label { font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(–muted); white-space: nowrap; }
 
-  /* Bus grid */
-  .bus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-  .bus-item { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 10px 6px 9px; cursor: pointer; transition: border-color 0.15s, opacity 0.2s; text-align: center; }
-  .bus-item:hover { border-color: #444; }
-  .bus-item.selected { border-color: var(--accent); background: rgba(200,240,96,0.04); }
-  .bus-item.is-sched-card { opacity: 0.45; border-style: dashed; }
-  .bus-item.is-sched-card:hover { opacity: 0.7; }
-  .bus-item.is-sched-card.selected { opacity: 0.8; }
-  .bus-time { font-size: 1.15rem; font-weight: 500; letter-spacing: -0.02em; }
-  .bus-sub { font-size: 0.58rem; color: var(--muted); margin-top: 2px; }
-  .bus-train { font-size: 0.62rem; color: var(--accent); margin-top: 4px; opacity: 0.9; letter-spacing: 0.01em; }
-  .badge { font-size: 0.52rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 5px; border-radius: 2px; display: inline-block; margin-top: 5px; }
-  .badge-good  { color: var(--good);   background: rgba(96,212,160,0.1); }
-  .badge-tight { color: var(--warn);   background: rgba(240,160,64,0.1); }
-  .badge-miss  { color: var(--danger); background: rgba(240,96,96,0.1); }
-  .loading-msg { text-align: center; padding: 14px; color: var(--muted); font-size: 0.7rem; }
-  .spinner { display: inline-block; width: 10px; height: 10px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 5px; vertical-align: middle; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .sched-divider { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; padding: 4px 0; }
-  .sched-divider-line { flex: 1; height: 1px; background: var(--border); }
-  .sched-divider-label { font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+/* Bus tracking status */
+.bus-status { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 4px; font-size: 0.57rem; letter-spacing: 0.07em; text-transform: uppercase; }
+.bus-status.is-full    { color: var(–good); }
+.bus-status.is-partial { color: var(–warn); }
+.bus-status.is-sched   { color: var(–muted); }
+.live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.is-full    .live-dot { background: var(–good); animation: liveblink 1.4s ease-in-out infinite; }
+.is-partial .live-dot { background: var(–warn); animation: liveblink 2s ease-in-out infinite; }
+.is-sched   .live-dot { background: var(–muted); }
+@keyframes liveblink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.25;transform:scale(0.7)} }
 
-  /* Bus tracking status */
-  .bus-status { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 4px; font-size: 0.57rem; letter-spacing: 0.07em; text-transform: uppercase; }
-  .bus-status.is-full    { color: var(--good); }
-  .bus-status.is-partial { color: var(--warn); }
-  .bus-status.is-sched   { color: var(--muted); }
-  .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-  .is-full    .live-dot { background: var(--good); animation: liveblink 1.4s ease-in-out infinite; }
-  .is-partial .live-dot { background: var(--warn); animation: liveblink 2s ease-in-out infinite; }
-  .is-sched   .live-dot { background: var(--muted); }
-  @keyframes liveblink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.25;transform:scale(0.7)} }
+/* Bus delay indicator */
+.bus-delay { font-size: 0.56rem; margin-top: 3px; line-height: 1.3; }
+.bus-delay .sched-time { color: var(–muted); text-decoration: line-through; font-size: 0.54rem; }
+.bus-delay .delay-amount { color: var(–warn); font-weight: 500; }
+.bus-delay .early-amount { color: var(–good); font-weight: 500; }
 
-  /* Result panel */
-  .result-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 12px 14px; }
-  .result-panel.active { border-color: var(--accent); }
-  .result-empty { font-size: 0.65rem; color: var(--muted); text-align: center; padding: 6px 0; }
-  .result-hero { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 12px; }
-  .result-lbl { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
-  .result-big { font-family: 'Fraunces', serif; font-size: 2.8rem; font-weight: 700; color: var(--accent); line-height: 1; }
-  .verdict { font-size: 0.9rem; font-weight: 500; text-align: right; padding-bottom: 4px; line-height: 1.3; }
-  .verdict.slack-good  { color: var(--good); }
-  .verdict.slack-tight { color: var(--warn); }
-  .verdict.slack-miss  { color: var(--danger); }
-  /* Step chain */
-  .steps { border-top: 1px solid var(--border); padding-top: 8px; display: flex; flex-direction: column; }
-  .step { display: flex; align-items: baseline; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #1c1c1c; gap: 10px; }
-  .step:last-child { border-bottom: none; }
-  .step-label { font-size: 0.68rem; color: var(--muted); flex-shrink: 0; }
-  .step-label em { color: var(--text); font-style: normal; }
-  .step-val { font-size: 0.88rem; color: var(--text); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
-  .step-val.hi  { color: var(--accent); font-size: 1rem; font-weight: 500; }
-  .step-val.dim { color: var(--muted); font-size: 0.72rem; }
-  .step-divider { height: 1px; background: var(--border); margin: 3px 0; }
-  /* Shower suggestion */
-  .suggestion { margin-top: 10px; border: 1px solid rgba(240,160,64,0.35); border-radius: 2px; padding: 8px 11px; background: rgba(240,160,64,0.05); display: flex; align-items: flex-start; gap: 8px; }
-  .suggestion-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
-  .suggestion-body { flex: 1; }
-  .suggestion-title { font-size: 0.72rem; color: var(--warn); font-weight: 500; }
-  .suggestion-detail { font-size: 0.64rem; color: var(--muted); margin-top: 3px; line-height: 1.5; }
-  .suggestion-detail strong { color: var(--text); }
-  .suggestion.is-ok { border-color: rgba(96,212,160,0.3); background: rgba(96,212,160,0.04); }
-  .suggestion.is-ok .suggestion-title { color: var(--good); }
-  /* Train live status */
-  .train-status { margin-top: 8px; border-radius: 2px; padding: 9px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); }
-  .train-status.ts-ok      { border-color: rgba(96,212,160,0.35); background: rgba(96,212,160,0.04); }
-  .train-status.ts-delay   { border-color: rgba(240,160,64,0.4);  background: rgba(240,160,64,0.05); }
-  .train-status.ts-cancel  { border-color: rgba(240,96,96,0.4);   background: rgba(240,96,96,0.05); }
-  .train-status.ts-loading { opacity: 0.5; }
-  .ts-left { display: flex; flex-direction: column; gap: 2px; }
-  .ts-dest  { font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-  .ts-time  { font-size: 1.05rem; font-weight: 500; letter-spacing: -0.02em; }
-  .ts-time .ts-sched { color: var(--text); }
-  .ts-time .ts-exp   { font-size: 0.78rem; margin-left: 6px; }
-  .ts-time .ts-exp.late { color: var(--warn); }
-  .ts-time .ts-exp.early { color: var(--good); }
-  .ts-right { text-align: right; }
-  .ts-badge { font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; white-space: nowrap; }
-  .ts-badge.on-time  { color: var(--good);   background: rgba(96,212,160,0.12); }
-  .ts-badge.delayed  { color: var(--warn);   background: rgba(240,160,64,0.12); }
-  .ts-badge.cancelled{ color: var(--danger); background: rgba(240,96,96,0.12); }
-  .ts-badge.loading  { color: var(--muted);  background: rgba(255,255,255,0.05); }
-  .ts-platform { font-size: 0.58rem; color: var(--muted); margin-top: 3px; }
+/* Result panel */
+.result-panel { background: var(–surface); border: 1px solid var(–border); border-radius: 2px; padding: 12px 14px; }
+.result-panel.active { border-color: var(–accent); }
+.result-empty { font-size: 0.65rem; color: var(–muted); text-align: center; padding: 6px 0; }
+.result-hero { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 12px; }
+.result-lbl { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(–muted); margin-bottom: 2px; }
+.result-big { font-family: ‘Fraunces’, serif; font-size: 2.8rem; font-weight: 700; color: var(–accent); line-height: 1; }
+.verdict { font-size: 0.9rem; font-weight: 500; text-align: right; padding-bottom: 4px; line-height: 1.3; }
+.verdict.slack-good  { color: var(–good); }
+.verdict.slack-tight { color: var(–warn); }
+.verdict.slack-miss  { color: var(–danger); }
+/* Step chain */
+.steps { border-top: 1px solid var(–border); padding-top: 8px; display: flex; flex-direction: column; }
+.step { display: flex; align-items: baseline; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #1c1c1c; gap: 10px; }
+.step:last-child { border-bottom: none; }
+.step-label { font-size: 0.68rem; color: var(–muted); flex-shrink: 0; }
+.step-label em { color: var(–text); font-style: normal; }
+.step-val { font-size: 0.88rem; color: var(–text); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.step-val.hi  { color: var(–accent); font-size: 1rem; font-weight: 500; }
+.step-val.dim { color: var(–muted); font-size: 0.72rem; }
+.step-divider { height: 1px; background: var(–border); margin: 3px 0; }
+/* Shower suggestion */
+.suggestion { margin-top: 10px; border: 1px solid rgba(240,160,64,0.35); border-radius: 2px; padding: 8px 11px; background: rgba(240,160,64,0.05); display: flex; align-items: flex-start; gap: 8px; }
+.suggestion-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.suggestion-body { flex: 1; }
+.suggestion-title { font-size: 0.72rem; color: var(–warn); font-weight: 500; }
+.suggestion-detail { font-size: 0.64rem; color: var(–muted); margin-top: 3px; line-height: 1.5; }
+.suggestion-detail strong { color: var(–text); }
+.suggestion.is-ok { border-color: rgba(96,212,160,0.3); background: rgba(96,212,160,0.04); }
+.suggestion.is-ok .suggestion-title { color: var(–good); }
+/* Train live status */
+.train-status { margin-top: 8px; border-radius: 2px; padding: 9px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(–border); background: rgba(255,255,255,0.02); }
+.train-status.ts-ok      { border-color: rgba(96,212,160,0.35); background: rgba(96,212,160,0.04); }
+.train-status.ts-delay   { border-color: rgba(240,160,64,0.4);  background: rgba(240,160,64,0.05); }
+.train-status.ts-cancel  { border-color: rgba(240,96,96,0.4);   background: rgba(240,96,96,0.05); }
+.train-status.ts-loading { opacity: 0.5; }
+.ts-left { display: flex; flex-direction: column; gap: 2px; }
+.ts-dest  { font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(–muted); }
+.ts-time  { font-size: 1.05rem; font-weight: 500; letter-spacing: -0.02em; }
+.ts-time .ts-sched { color: var(–text); }
+.ts-time .ts-exp   { font-size: 0.78rem; margin-left: 6px; }
+.ts-time .ts-exp.late { color: var(–warn); }
+.ts-time .ts-exp.early { color: var(–good); }
+.ts-right { text-align: right; }
+.ts-badge { font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; white-space: nowrap; }
+.ts-badge.on-time  { color: var(–good);   background: rgba(96,212,160,0.12); }
+.ts-badge.delayed  { color: var(–warn);   background: rgba(240,160,64,0.12); }
+.ts-badge.cancelled{ color: var(–danger); background: rgba(240,96,96,0.12); }
+.ts-badge.loading  { color: var(–muted);  background: rgba(255,255,255,0.05); }
+.ts-platform { font-size: 0.58rem; color: var(–muted); margin-top: 3px; }
 </style>
+
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -176,11 +164,6 @@
       <div id="clock">--:--:--</div>
       <div class="header-sub">186 · Whitchurch Lane → H&amp;W</div>
     </div>
-  </div>
-
-  <!-- SNOOZE HERO -->
-  <div class="snooze-hero" id="snoozeHero">
-    <div class="snooze-empty">loading buses…</div>
   </div>
 
   <div class="config-row">
@@ -303,28 +286,35 @@ function nextTrain(afterMins) {
     }
     return null;
   }
-  // Fallback to timetable if Darwin didn't load
   if (darwinLoaded) return nextTrainFromTimetable(afterMins);
   return null;
 }
 
-// Train timetable fallback (approximate HRW departures to MKC — every ~20 min peak, ~30 off-peak)
 function nextTrainFromTimetable(afterMins) {
-  // Simple approximation: trains depart roughly every 20 min from ~5:30 to ~23:50
   const start = 5 * 60 + 30;
   const end   = 23 * 60 + 50;
   if (afterMins > end) return null;
   const from = Math.max(afterMins, start);
-  // Round up to next :00, :20, :40 (rough 20-min headway)
   const slot = Math.ceil(from / 20) * 20;
   return slot <= end ? slot : null;
 }
 
 function mergeBuses(liveR, hwVehicles, nm) {
-  const MATCH_WINDOW = 3;
+  const MATCH_WINDOW = 5; // widened from 3 to catch late-running buses
   const LOOKAHEAD    = 90;
+  const tt = getTodayTimetable();
+
+  // Build list of upcoming timetable slots
+  const ttSlots = [];
+  for (const [h, m] of tt) {
+    const slotMins = h * 60 + m;
+    if (slotMins < nm - 2) continue;
+    if (slotMins > nm + LOOKAHEAD) break;
+    ttSlots.push(slotMins);
+  }
+
   const liveEntries = liveR
-    .filter(bus => nm + bus.timeToStation / 60 >= nm) // filter out already-passed buses
+    .filter(bus => nm + bus.timeToStation / 60 >= nm)
     .map(bus => {
       const depMins = nm + bus.timeToStation / 60;
       const hwTTS   = hwVehicles[bus.vehicleId];
@@ -339,22 +329,52 @@ function mergeBuses(liveR, hwVehicles, nm) {
       } else {
         tracking = 'partial'; jMins = FALLBACK_JOURNEY;
       }
-      return { depMins, jMins, tracking, live: true, bus };
+
+      // Try to match this live bus to a scheduled timetable slot
+      let schedSlot = null;
+      let busDelay = null;
+      let bestDiff = Infinity;
+      for (const slotMins of ttSlots) {
+        const diff = depMins - slotMins; // positive = bus is late
+        const absDiff = Math.abs(diff);
+        // Match if live bus is within window of a scheduled slot
+        // Bias towards late matches (bus running behind schedule)
+        if (absDiff <= MATCH_WINDOW && absDiff < bestDiff) {
+          bestDiff = absDiff;
+          schedSlot = slotMins;
+          busDelay = Math.round(diff);
+        }
+      }
+
+      return {
+        depMins, jMins, tracking, live: true, bus,
+        schedSlot,   // the timetable slot this bus likely belongs to (or null)
+        busDelay     // minutes late (positive) or early (negative) vs schedule
+      };
     });
-  const tt = getTodayTimetable();
+
+  // Track which timetable slots have been claimed by live buses
+  const claimedSlots = new Set();
+  for (const entry of liveEntries) {
+    if (entry.schedSlot !== null) claimedSlots.add(entry.schedSlot);
+  }
+
+  // Remaining unclaimed timetable slots become scheduled entries
   const schedEntries = [];
-  for (const [h, m] of tt) {
-    const slotMins = h * 60 + m;
-    if (slotMins < nm - 1) continue;
-    if (slotMins > nm + LOOKAHEAD) break;
-    const matched = liveEntries.some(e => Math.abs(e.depMins - slotMins) <= MATCH_WINDOW);
-    if (!matched) {
-      schedEntries.push({
-        depMins: slotMins, jMins: FALLBACK_JOURNEY,
-        tracking: 'scheduled', live: false, bus: null
-      });
+  for (const slotMins of ttSlots) {
+    if (!claimedSlots.has(slotMins)) {
+      // Also check if any live bus is close (old behavior as fallback)
+      const matched = liveEntries.some(e => Math.abs(e.depMins - slotMins) <= 3);
+      if (!matched) {
+        schedEntries.push({
+          depMins: slotMins, jMins: FALLBACK_JOURNEY,
+          tracking: 'scheduled', live: false, bus: null,
+          schedSlot: slotMins, busDelay: null
+        });
+      }
     }
   }
+
   return [...liveEntries, ...schedEntries].sort((a, b) => a.depMins - b.depMins);
 }
 
@@ -371,7 +391,6 @@ function toggleScheduled() {
   renderBuses();
 }
 
-// Compute prep/wake/slack for a given bus entry
 function calcForEntry(entry) {
   const nm      = nowMins();
   const { depMins, jMins, tracking } = entry;
@@ -390,77 +409,12 @@ function calcForEntry(entry) {
   return { depMins, jMins, tracking, arrHW, train, showerMins, trimMins, prepTotal, leaveAt, startPrepBy, slack, walk };
 }
 
-// Find the best bus: first catchable tracked bus with a train connection
-function findBestBus() {
-  const nm   = nowMins();
-  const walk = parseInt(document.getElementById('walkMins').value) || 4;
-  for (let i = 0; i < mergedBuses.length; i++) {
-    const entry = mergedBuses[i];
-    if (entry.tracking === 'scheduled') continue; // only tracked buses for snooze
-    const minsAway = Math.round(entry.depMins - nm);
-    if (minsAway < walk) continue; // can't catch
-    const calc = calcForEntry(entry);
-    if (calc.train) return { idx: i, entry, calc };
-  }
-  return null;
-}
-
-function renderSnooze() {
-  const hero = document.getElementById('snoozeHero');
-  const best = findBestBus();
-
-  if (!best) {
-    const msg = mergedBuses.length === 0 ? 'loading buses…'
-      : darwinLoaded && darwinTrains.length === 0 ? 'no trains found — check manually'
-      : 'no catchable tracked buses right now';
-    hero.className = 'snooze-hero';
-    hero.innerHTML = `<div class="snooze-empty">${msg}</div>`;
-    return;
-  }
-
-  const { calc, entry } = best;
-  const nm = nowMins();
-  const snoozeMinutes = Math.max(0, Math.floor(calc.startPrepBy - nm));
-  const isUrgent = calc.slack < 0;
-  const isTight  = calc.slack >= 0 && calc.slack < 5;
-
-  let verdictCls, verdictText;
-  if (isUrgent) {
-    verdictCls = 'sv-miss';
-    verdictText = `${Math.abs(calc.slack)} min late — get up!`;
-  } else if (isTight) {
-    verdictCls = 'sv-tight';
-    verdictText = 'get moving';
-  } else {
-    verdictCls = 'sv-good';
-    verdictText = `${calc.slack} min to spare`;
-  }
-
-  const heroClass = isUrgent ? 'snooze-hero urgent' : snoozeMinutes > 0 ? 'snooze-hero has-time' : 'snooze-hero';
-
-  const snoozeDisplay = isUrgent ? 'now' : snoozeMinutes === 0 ? 'now' : `${snoozeMinutes} min`;
-  const alarmTime = fmt(calc.startPrepBy);
-
-  hero.className = heroClass;
-  hero.innerHTML = `
-    <div class="snooze-left">
-      <div class="snooze-label">${isUrgent ? 'you\'re late by' : snoozeMinutes === 0 ? 'wake up' : 'you can snooze'}</div>
-      <div class="snooze-time">${snoozeDisplay}</div>
-      <div class="snooze-sub">for the <strong>${fmt(entry.depMins)}</strong> bus → <strong>${fmt(calc.train)}</strong> train</div>
-    </div>
-    <div class="snooze-right">
-      <div class="snooze-alarm">alarm at <strong>${alarmTime}</strong></div>
-      <div class="snooze-verdict ${verdictCls}">${verdictText}</div>
-    </div>`;
-}
-
 async function loadBuses() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('loading');
   document.getElementById('busList').innerHTML =
     '<div class="loading-msg" style="grid-column:1/-1"><span class="spinner"></span>fetching live data...</div>';
 
-  // Preserve selection by departure time
   const prevDepMins = selectedIdx !== null && mergedBuses[selectedIdx] ? mergedBuses[selectedIdx].depMins : null;
   selectedIdx = null;
 
@@ -479,7 +433,7 @@ async function loadBuses() {
       const darwinData = await resDarwin.json();
       darwinTrains = darwinData.trainServices || [];
     } else {
-      darwinTrains = []; // Darwin failed — fallback will kick in via nextTrainFromTimetable
+      darwinTrains = [];
     }
 
     liveR = dataR
@@ -492,7 +446,6 @@ async function loadBuses() {
 
     mergedBuses = mergeBuses(liveR, hwVehicles, nowMins());
 
-    // Restore selection
     if (prevDepMins !== null) {
       let bestMatch = -1, bestDiff = Infinity;
       mergedBuses.forEach((e, i) => {
@@ -503,7 +456,6 @@ async function loadBuses() {
     }
 
     renderBuses();
-    renderSnooze();
     renderResult();
   } catch(e) {
     document.getElementById('busList').innerHTML =
@@ -530,7 +482,6 @@ function renderBuses() {
     scheduled: { cls: 'is-sched',   label: 'scheduled' }
   };
 
-  // Split tracked vs scheduled
   const tracked   = [];
   const scheduled = [];
   mergedBuses.forEach((entry, i) => {
@@ -540,7 +491,6 @@ function renderBuses() {
 
   let html = '';
 
-  // Tracked buses (always shown)
   if (!tracked.length) {
     html += '<div class="loading-msg" style="grid-column:1/-1">no tracked buses — toggle scheduled ↗</div>';
   } else {
@@ -549,7 +499,6 @@ function renderBuses() {
     });
   }
 
-  // Scheduled buses (toggled)
   if (showScheduled && scheduled.length) {
     html += `<div class="sched-divider"><div class="sched-divider-line"></div><div class="sched-divider-label">scheduled (timetable only)</div><div class="sched-divider-line"></div></div>`;
     scheduled.forEach(({ entry, origIdx }) => {
@@ -561,7 +510,7 @@ function renderBuses() {
 }
 
 function renderBusCard(entry, idx, nm, walk, statusMeta) {
-  const { depMins, jMins, tracking } = entry;
+  const { depMins, jMins, tracking, schedSlot, busDelay } = entry;
   const minsAway = Math.round(depMins - nm);
   const canCatch = minsAway >= walk;
   const tight    = canCatch && (minsAway - walk) < 3;
@@ -575,9 +524,20 @@ function renderBusCard(entry, idx, nm, walk, statusMeta) {
   const cardDim  = tracking === 'scheduled' ? 'is-sched-card' : '';
   const sel      = selectedIdx === idx ? 'selected' : '';
 
+  // Delay indicator: show scheduled time + delay if this tracked bus matched a timetable slot
+  let delayHtml = '';
+  if (tracking !== 'scheduled' && schedSlot !== null && busDelay !== null && Math.abs(busDelay) >= 1) {
+    if (busDelay > 0) {
+      delayHtml = `<div class="bus-delay"><span class="sched-time">${fmt(schedSlot)}</span> <span class="delay-amount">+${busDelay} late</span></div>`;
+    } else {
+      delayHtml = `<div class="bus-delay"><span class="sched-time">${fmt(schedSlot)}</span> <span class="early-amount">${busDelay} early</span></div>`;
+    }
+  }
+
   return `<div class="bus-item ${sel} ${cardDim}" onclick="selectBus(${idx})">
     <div class="bus-status ${stCls}"><span class="live-dot"></span>${stLbl}</div>
     <div class="bus-time">${fmt(depMins)}</div>
+    ${delayHtml}
     <div class="bus-sub">in ${minsAway} min</div>
     <div class="bus-sub">${rideLabel}</div>
     <div class="bus-train">${trainLabel}</div>
@@ -642,6 +602,16 @@ function renderResult() {
   const rideColors = { full: 'var(--good)', partial: 'var(--warn)', scheduled: 'var(--muted)' };
   const rideLabels = { full: 'live', partial: 'partial', scheduled: 'sched' };
   const rideNote = `${tracking === 'full' ? jMins : '~'+jMins} min <span style="color:${rideColors[tracking]};font-size:0.65rem">${rideLabels[tracking]}</span>`;
+
+  // Bus delay note for the result panel
+  let busDelayNote = '';
+  if (entry.schedSlot !== null && entry.busDelay !== null && Math.abs(entry.busDelay) >= 1) {
+    if (entry.busDelay > 0) {
+      busDelayNote = ` <span style="color:var(--warn);font-size:0.65rem">sched ${fmt(entry.schedSlot)}, +${entry.busDelay} late</span>`;
+    } else {
+      busDelayNote = ` <span style="color:var(--good);font-size:0.65rem">sched ${fmt(entry.schedSlot)}, ${entry.busDelay} early</span>`;
+    }
+  }
 
   // Shower suggestion
   let suggestionHtml = '';
@@ -734,7 +704,7 @@ function renderResult() {
       </div>
       <div class="step">
         <div class="step-label">🚌 board 186 at stop R</div>
-        <div class="step-val">${fmt(depMins)} <span style="color:var(--muted);font-size:0.7rem">(in ${Math.round(busDepMins)} min)</span></div>
+        <div class="step-val">${fmt(depMins)} <span style="color:var(--muted);font-size:0.7rem">(in ${Math.round(busDepMins)} min)</span>${busDelayNote}</div>
       </div>
       <div class="step">
         <div class="step-label">📍 arrive H&amp;W</div>
@@ -751,14 +721,12 @@ function renderResult() {
 }
 
 document.querySelectorAll('input').forEach(el => {
-  el.addEventListener('change', () => { renderBuses(); renderSnooze(); renderResult(); });
-  el.addEventListener('input',  () => { renderSnooze(); renderResult(); });
+  el.addEventListener('change', () => { renderBuses(); renderResult(); });
+  el.addEventListener('input',  () => { renderResult(); });
 });
 
 loadBuses();
 setInterval(loadBuses, 60000);
-// Update snooze countdown every 15s between refreshes
-setInterval(() => { renderSnooze(); }, 15000);
 
 function updateClock() {
   const n = new Date();
@@ -770,6 +738,7 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 </script>
+
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -777,5 +746,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+
 </body>
 </html>
