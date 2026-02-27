@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -26,128 +27,160 @@
   #clock { font-family: 'Fraunces', serif; font-size: 2.6rem; font-weight: 300; color: var(--text); line-height: 1; letter-spacing: -0.03em; }
   .header-sub { font-size: 0.58rem; color: var(--muted); letter-spacing: 0.06em; margin-top: 3px; }
 
-  /* Config */
-  .config-row { display: flex; gap: 6px; }
-  .config-block { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 7px 10px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
-  .cfg-label { font-size: 0.54rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .toggle-row { display: flex; align-items: center; justify-content: space-between; }
-  .toggle-name { font-size: 0.7rem; }
-  .toggle-mins { font-size: 0.58rem; color: var(--muted); }
-  .switch { position: relative; width: 32px; height: 17px; cursor: pointer; flex-shrink: 0; }
-  .switch input { display: none; }
-  .slider { position: absolute; inset: 0; background: #222; border-radius: 2px; transition: 0.15s; }
-  .slider:before { content: ''; position: absolute; width: 11px; height: 11px; left: 3px; top: 3px; background: var(--muted); border-radius: 1px; transition: 0.15s; }
-  input:checked + .slider { background: rgba(200,240,96,0.12); }
-  input:checked + .slider:before { transform: translateX(15px); background: var(--accent); }
-  .num-row { display: flex; align-items: center; justify-content: space-between; }
-  .num-name { font-size: 0.7rem; }
-  .num-ctrl { display: flex; align-items: center; gap: 4px; }
-  .num-input { background: #1a1a1a; border: 1px solid var(--border); color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.72rem; padding: 2px 0; border-radius: 2px; width: 36px; text-align: center; outline: none; }
-  .num-input:focus { border-color: var(--accent); }
-  .num-unit { font-size: 0.58rem; color: var(--muted); }
+/* Weather strip */
+.weather-strip { display: flex; align-items: center; justify-content: space-between; background: var(–surface); border: 1px solid var(–border); border-radius: 2px; padding: 6px 10px; gap: 8px; min-height: 32px; }
+.weather-left { display: flex; align-items: center; gap: 7px; }
+.weather-icon { font-size: 1.1rem; }
+.weather-temp { font-size: 0.82rem; font-weight: 500; }
+.weather-desc { font-size: 0.58rem; color: var(–muted); text-transform: lowercase; }
+.weather-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.weather-tag { font-size: 0.52rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; white-space: nowrap; }
+.weather-tag.rain { color: #6cb4ee; background: rgba(108,180,238,0.12); }
+.weather-tag.cold { color: #8ec8f0; background: rgba(142,200,240,0.1); }
+.weather-tag.wind { color: var(–muted); background: rgba(255,255,255,0.04); }
+.weather-tag.clear { color: var(–good); background: rgba(96,212,160,0.08); }
+.weather-prep { font-size: 0.54rem; color: var(–warn); white-space: nowrap; }
+.weather-loading { font-size: 0.58rem; color: var(–muted); }
 
-  /* Refresh row */
-  .refresh-row { display: flex; justify-content: space-between; align-items: center; }
-  .section-label { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .refresh-right { display: flex; align-items: center; gap: 6px; }
-  .refresh-btn { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; background: none; border: 1px solid var(--border); color: var(--muted); padding: 5px 9px; border-radius: 2px; cursor: pointer; transition: all 0.15s; }
-  .refresh-btn:hover, .refresh-btn.loading { border-color: var(--accent); color: var(--accent); }
-  .sched-toggle { font-family: 'DM Mono', monospace; font-size: 0.54rem; letter-spacing: 0.06em; text-transform: uppercase; background: none; border: 1px solid var(--border); color: var(--muted); padding: 5px 8px; border-radius: 2px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-  .sched-toggle:hover { border-color: #444; color: var(--text); }
-  .sched-toggle.active { border-color: rgba(200,240,96,0.3); color: var(--accent); background: rgba(200,240,96,0.04); }
-  .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-right: 5px; animation: pulse 2s ease-in-out infinite; vertical-align: middle; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+/* Line status banner */
+.line-banner { display: flex; align-items: center; gap: 8px; border-radius: 2px; padding: 7px 10px; font-size: 0.62rem; line-height: 1.4; }
+.line-banner.lb-good { border: 1px solid rgba(96,212,160,0.2); background: rgba(96,212,160,0.03); color: var(–good); }
+.line-banner.lb-warn { border: 1px solid rgba(240,160,64,0.35); background: rgba(240,160,64,0.05); color: var(–warn); }
+.line-banner.lb-bad  { border: 1px solid rgba(240,96,96,0.35); background: rgba(240,96,96,0.05); color: var(–danger); }
+.line-banner.lb-info { border: 1px solid var(–border); background: var(–surface); color: var(–muted); }
+.lb-icon { font-size: 0.9rem; flex-shrink: 0; }
+.lb-body { flex: 1; }
+.lb-title { font-weight: 500; font-size: 0.62rem; }
+.lb-detail { font-size: 0.56rem; color: var(–muted); margin-top: 2px; }
+.line-banner.lb-warn .lb-detail, .line-banner.lb-bad .lb-detail { color: inherit; opacity: 0.75; }
 
-  /* Bus grid */
-  .bus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-  .bus-item { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 10px 6px 9px; cursor: pointer; transition: border-color 0.15s, opacity 0.2s; text-align: center; }
-  .bus-item:hover { border-color: #444; }
-  .bus-item.selected { border-color: var(--accent); background: rgba(200,240,96,0.04); }
-  .bus-item.is-sched-card { opacity: 0.45; border-style: dashed; }
-  .bus-item.is-sched-card:hover { opacity: 0.7; }
-  .bus-item.is-sched-card.selected { opacity: 0.8; }
-  .bus-time { font-size: 1.15rem; font-weight: 500; letter-spacing: -0.02em; }
-  .bus-sub { font-size: 0.58rem; color: var(--muted); margin-top: 2px; }
-  .bus-train { font-size: 0.62rem; color: var(--accent); margin-top: 4px; opacity: 0.9; letter-spacing: 0.01em; }
-  .badge { font-size: 0.52rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 5px; border-radius: 2px; display: inline-block; margin-top: 5px; }
-  .badge-good  { color: var(--good);   background: rgba(96,212,160,0.1); }
-  .badge-tight { color: var(--warn);   background: rgba(240,160,64,0.1); }
-  .badge-miss  { color: var(--danger); background: rgba(240,96,96,0.1); }
-  .loading-msg { text-align: center; padding: 14px; color: var(--muted); font-size: 0.7rem; }
-  .spinner { display: inline-block; width: 10px; height: 10px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 5px; vertical-align: middle; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .sched-divider { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; padding: 4px 0; }
-  .sched-divider-line { flex: 1; height: 1px; background: var(--border); }
-  .sched-divider-label { font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+/* Config */
+.config-row { display: flex; gap: 6px; }
+.config-block { background: var(–surface); border: 1px solid var(–border); border-radius: 2px; padding: 7px 10px; display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.cfg-label { font-size: 0.54rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(–muted); }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; }
+.toggle-name { font-size: 0.7rem; }
+.toggle-mins { font-size: 0.58rem; color: var(–muted); }
+.switch { position: relative; width: 32px; height: 17px; cursor: pointer; flex-shrink: 0; }
+.switch input { display: none; }
+.slider { position: absolute; inset: 0; background: #222; border-radius: 2px; transition: 0.15s; }
+.slider:before { content: ‘’; position: absolute; width: 11px; height: 11px; left: 3px; top: 3px; background: var(–muted); border-radius: 1px; transition: 0.15s; }
+input:checked + .slider { background: rgba(200,240,96,0.12); }
+input:checked + .slider:before { transform: translateX(15px); background: var(–accent); }
+.num-row { display: flex; align-items: center; justify-content: space-between; }
+.num-name { font-size: 0.7rem; }
+.num-ctrl { display: flex; align-items: center; gap: 4px; }
+.num-input { background: #1a1a1a; border: 1px solid var(–border); color: var(–text); font-family: ‘DM Mono’, monospace; font-size: 0.72rem; padding: 2px 0; border-radius: 2px; width: 36px; text-align: center; outline: none; }
+.num-input:focus { border-color: var(–accent); }
+.num-unit { font-size: 0.58rem; color: var(–muted); }
 
-  /* Bus tracking status */
-  .bus-status { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 4px; font-size: 0.57rem; letter-spacing: 0.07em; text-transform: uppercase; }
-  .bus-status.is-full    { color: var(--good); }
-  .bus-status.is-partial { color: var(--warn); }
-  .bus-status.is-sched   { color: var(--muted); }
-  .live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-  .is-full    .live-dot { background: var(--good); animation: liveblink 1.4s ease-in-out infinite; }
-  .is-partial .live-dot { background: var(--warn); animation: liveblink 2s ease-in-out infinite; }
-  .is-sched   .live-dot { background: var(--muted); }
-  @keyframes liveblink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.25;transform:scale(0.7)} }
+/* Refresh row */
+.refresh-row { display: flex; justify-content: space-between; align-items: center; }
+.section-label { font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(–muted); }
+.refresh-right { display: flex; align-items: center; gap: 6px; }
+.refresh-btn { font-family: ‘DM Mono’, monospace; font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; background: none; border: 1px solid var(–border); color: var(–muted); padding: 5px 9px; border-radius: 2px; cursor: pointer; transition: all 0.15s; }
+.refresh-btn:hover, .refresh-btn.loading { border-color: var(–accent); color: var(–accent); }
+.sched-toggle { font-family: ‘DM Mono’, monospace; font-size: 0.54rem; letter-spacing: 0.06em; text-transform: uppercase; background: none; border: 1px solid var(–border); color: var(–muted); padding: 5px 8px; border-radius: 2px; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.sched-toggle:hover { border-color: #444; color: var(–text); }
+.sched-toggle.active { border-color: rgba(200,240,96,0.3); color: var(–accent); background: rgba(200,240,96,0.04); }
+.dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(–accent); margin-right: 5px; animation: pulse 2s ease-in-out infinite; vertical-align: middle; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  /* Bus delay indicator */
-  .bus-delay { font-size: 0.56rem; margin-top: 3px; line-height: 1.3; }
-  .bus-delay .sched-time { color: var(--muted); text-decoration: line-through; font-size: 0.54rem; }
-  .bus-delay .delay-amount { color: var(--warn); font-weight: 500; }
-  .bus-delay .early-amount { color: var(--good); font-weight: 500; }
+/* Bus grid */
+.bus-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+.bus-item { background: var(–surface); border: 1px solid var(–border); border-radius: 2px; padding: 10px 6px 9px; cursor: pointer; transition: border-color 0.15s, opacity 0.2s; text-align: center; }
+.bus-item:hover { border-color: #444; }
+.bus-item.selected { border-color: var(–accent); background: rgba(200,240,96,0.04); }
+.bus-item.is-uncatchable { opacity: 0.35; }
+.bus-item.is-sched-card { opacity: 0.45; border-style: dashed; }
+.bus-item.is-sched-card:hover { opacity: 0.7; }
+.bus-item.is-sched-card.selected { opacity: 0.8; }
+.bus-time { font-size: 1.15rem; font-weight: 500; letter-spacing: -0.02em; }
+.bus-sub { font-size: 0.58rem; color: var(–muted); margin-top: 2px; }
+.bus-train { font-size: 0.62rem; color: var(–accent); margin-top: 4px; opacity: 0.9; letter-spacing: 0.01em; }
+.badge { font-size: 0.52rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 2px 5px; border-radius: 2px; display: inline-block; margin-top: 5px; }
+.badge-good  { color: var(–good);   background: rgba(96,212,160,0.1); }
+.badge-tight { color: var(–warn);   background: rgba(240,160,64,0.1); }
+.badge-miss  { color: var(–danger); background: rgba(240,96,96,0.1); }
+.loading-msg { text-align: center; padding: 14px; color: var(–muted); font-size: 0.7rem; }
+.spinner { display: inline-block; width: 10px; height: 10px; border: 2px solid var(–border); border-top-color: var(–accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 5px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.sched-divider { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+.sched-divider-line { flex: 1; height: 1px; background: var(–border); }
+.sched-divider-label { font-size: 0.52rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(–muted); white-space: nowrap; }
 
-  /* Result panel */
-  .result-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 2px; padding: 12px 14px; }
-  .result-panel.active { border-color: var(--accent); }
-  .result-empty { font-size: 0.65rem; color: var(--muted); text-align: center; padding: 6px 0; }
-  .result-hero { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 12px; }
-  .result-lbl { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
-  .result-big { font-family: 'Fraunces', serif; font-size: 2.8rem; font-weight: 700; color: var(--accent); line-height: 1; }
-  .verdict { font-size: 0.9rem; font-weight: 500; text-align: right; padding-bottom: 4px; line-height: 1.3; }
-  .verdict.slack-good  { color: var(--good); }
-  .verdict.slack-tight { color: var(--warn); }
-  .verdict.slack-miss  { color: var(--danger); }
-  /* Step chain */
-  .steps { border-top: 1px solid var(--border); padding-top: 8px; display: flex; flex-direction: column; }
-  .step { display: flex; align-items: baseline; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #1c1c1c; gap: 10px; }
-  .step:last-child { border-bottom: none; }
-  .step-label { font-size: 0.68rem; color: var(--muted); flex-shrink: 0; }
-  .step-label em { color: var(--text); font-style: normal; }
-  .step-val { font-size: 0.88rem; color: var(--text); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
-  .step-val.hi  { color: var(--accent); font-size: 1rem; font-weight: 500; }
-  .step-val.dim { color: var(--muted); font-size: 0.72rem; }
-  .step-divider { height: 1px; background: var(--border); margin: 3px 0; }
-  /* Shower suggestion */
-  .suggestion { margin-top: 10px; border: 1px solid rgba(240,160,64,0.35); border-radius: 2px; padding: 8px 11px; background: rgba(240,160,64,0.05); display: flex; align-items: flex-start; gap: 8px; }
-  .suggestion-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
-  .suggestion-body { flex: 1; }
-  .suggestion-title { font-size: 0.72rem; color: var(--warn); font-weight: 500; }
-  .suggestion-detail { font-size: 0.64rem; color: var(--muted); margin-top: 3px; line-height: 1.5; }
-  .suggestion-detail strong { color: var(--text); }
-  .suggestion.is-ok { border-color: rgba(96,212,160,0.3); background: rgba(96,212,160,0.04); }
-  .suggestion.is-ok .suggestion-title { color: var(--good); }
-  /* Train live status */
-  .train-status { margin-top: 8px; border-radius: 2px; padding: 9px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); }
-  .train-status.ts-ok      { border-color: rgba(96,212,160,0.35); background: rgba(96,212,160,0.04); }
-  .train-status.ts-delay   { border-color: rgba(240,160,64,0.4);  background: rgba(240,160,64,0.05); }
-  .train-status.ts-cancel  { border-color: rgba(240,96,96,0.4);   background: rgba(240,96,96,0.05); }
-  .train-status.ts-loading { opacity: 0.5; }
-  .ts-left { display: flex; flex-direction: column; gap: 2px; }
-  .ts-dest  { font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-  .ts-time  { font-size: 1.05rem; font-weight: 500; letter-spacing: -0.02em; }
-  .ts-time .ts-sched { color: var(--text); }
-  .ts-time .ts-exp   { font-size: 0.78rem; margin-left: 6px; }
-  .ts-time .ts-exp.late { color: var(--warn); }
-  .ts-time .ts-exp.early { color: var(--good); }
-  .ts-right { text-align: right; }
-  .ts-badge { font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; white-space: nowrap; }
-  .ts-badge.on-time  { color: var(--good);   background: rgba(96,212,160,0.12); }
-  .ts-badge.delayed  { color: var(--warn);   background: rgba(240,160,64,0.12); }
-  .ts-badge.cancelled{ color: var(--danger); background: rgba(240,96,96,0.12); }
-  .ts-badge.loading  { color: var(--muted);  background: rgba(255,255,255,0.05); }
-  .ts-platform { font-size: 0.58rem; color: var(--muted); margin-top: 3px; }
+/* Bus tracking status */
+.bus-status { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 4px; font-size: 0.57rem; letter-spacing: 0.07em; text-transform: uppercase; }
+.bus-status.is-full    { color: var(–good); }
+.bus-status.is-partial { color: var(–warn); }
+.bus-status.is-sched   { color: var(–muted); }
+.live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.is-full    .live-dot { background: var(–good); animation: liveblink 1.4s ease-in-out infinite; }
+.is-partial .live-dot { background: var(–warn); animation: liveblink 2s ease-in-out infinite; }
+.is-sched   .live-dot { background: var(–muted); }
+@keyframes liveblink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.25;transform:scale(0.7)} }
+
+/* Bus delay indicator */
+.bus-delay { font-size: 0.55rem; margin-top: 2px; line-height: 1.3; }
+.bus-delay .sched-time { color: var(–muted); text-decoration: line-through; }
+.bus-delay .delay-amount { color: var(–warn); font-weight: 500; }
+.bus-delay .early-amount { color: var(–good); font-weight: 500; }
+
+/* Bus history tag */
+.bus-history { font-size: 0.5rem; color: var(–muted); margin-top: 3px; font-style: italic; }
+
+/* Result panel */
+.result-panel { background: var(–surface); border: 1px solid var(–border); border-radius: 2px; padding: 12px 14px; }
+.result-panel.active { border-color: var(–accent); }
+.result-empty { font-size: 0.65rem; color: var(–muted); text-align: center; padding: 6px 0; }
+.result-hero { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 12px; }
+.result-lbl { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(–muted); margin-bottom: 2px; }
+.result-big { font-family: ‘Fraunces’, serif; font-size: 2.8rem; font-weight: 700; color: var(–accent); line-height: 1; }
+.verdict { font-size: 0.9rem; font-weight: 500; text-align: right; padding-bottom: 4px; line-height: 1.3; }
+.verdict.slack-good  { color: var(–good); }
+.verdict.slack-tight { color: var(–warn); }
+.verdict.slack-miss  { color: var(–danger); }
+/* Step chain */
+.steps { border-top: 1px solid var(–border); padding-top: 8px; display: flex; flex-direction: column; }
+.step { display: flex; align-items: baseline; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #1c1c1c; gap: 10px; }
+.step:last-child { border-bottom: none; }
+.step-label { font-size: 0.68rem; color: var(–muted); flex-shrink: 0; }
+.step-label em { color: var(–text); font-style: normal; }
+.step-val { font-size: 0.88rem; color: var(–text); font-variant-numeric: tabular-nums; text-align: right; min-width: 0; }
+.step-val.hi  { color: var(–accent); font-size: 1rem; font-weight: 500; }
+.step-val.dim { color: var(–muted); font-size: 0.72rem; }
+.step-divider { height: 1px; background: var(–border); margin: 3px 0; }
+/* Shower suggestion */
+.suggestion { margin-top: 10px; border: 1px solid rgba(240,160,64,0.35); border-radius: 2px; padding: 8px 11px; background: rgba(240,160,64,0.05); display: flex; align-items: flex-start; gap: 8px; }
+.suggestion-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.suggestion-body { flex: 1; }
+.suggestion-title { font-size: 0.72rem; color: var(–warn); font-weight: 500; }
+.suggestion-detail { font-size: 0.64rem; color: var(–muted); margin-top: 3px; line-height: 1.5; }
+.suggestion-detail strong { color: var(–text); }
+.suggestion.is-ok { border-color: rgba(96,212,160,0.3); background: rgba(96,212,160,0.04); }
+.suggestion.is-ok .suggestion-title { color: var(–good); }
+/* Train live status */
+.train-status { margin-top: 8px; border-radius: 2px; padding: 9px 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(–border); background: rgba(255,255,255,0.02); }
+.train-status.ts-ok      { border-color: rgba(96,212,160,0.35); background: rgba(96,212,160,0.04); }
+.train-status.ts-delay   { border-color: rgba(240,160,64,0.4);  background: rgba(240,160,64,0.05); }
+.train-status.ts-cancel  { border-color: rgba(240,96,96,0.4);   background: rgba(240,96,96,0.05); }
+.train-status.ts-loading { opacity: 0.5; }
+.ts-left { display: flex; flex-direction: column; gap: 2px; }
+.ts-dest  { font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(–muted); }
+.ts-time  { font-size: 1.05rem; font-weight: 500; letter-spacing: -0.02em; }
+.ts-time .ts-sched { color: var(–text); }
+.ts-time .ts-exp   { font-size: 0.78rem; margin-left: 6px; }
+.ts-time .ts-exp.late { color: var(–warn); }
+.ts-time .ts-exp.early { color: var(–good); }
+.ts-right { text-align: right; }
+.ts-badge { font-size: 0.58rem; letter-spacing: 0.07em; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; white-space: nowrap; }
+.ts-badge.on-time  { color: var(–good);   background: rgba(96,212,160,0.12); }
+.ts-badge.delayed  { color: var(–warn);   background: rgba(240,160,64,0.12); }
+.ts-badge.cancelled{ color: var(–danger); background: rgba(240,96,96,0.12); }
+.ts-badge.loading  { color: var(–muted);  background: rgba(255,255,255,0.05); }
+.ts-platform { font-size: 0.58rem; color: var(–muted); margin-top: 3px; }
 </style>
+
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -163,6 +196,16 @@
       <div class="header-sub">186 · Whitchurch Lane → H&amp;W</div>
     </div>
   </div>
+
+  <!-- WEATHER STRIP -->
+
+  <div class="weather-strip" id="weatherStrip">
+    <div class="weather-loading"><span class="spinner"></span>weather...</div>
+  </div>
+
+  <!-- LINE STATUS BANNER (hidden if good service) -->
+
+  <div id="lineBanner"></div>
 
   <div class="config-row">
     <div class="config-block">
@@ -211,6 +254,11 @@ const STOP_HW  = '490015249M';
 const DARWIN_TOKEN = '61dc1202-c81c-4766-92a9-ff422409042f';
 const DARWIN_URL   = `https://huxley2.azurewebsites.net/departures/hrw/to/mkc/10?accessToken=${DARWIN_TOKEN}`;
 
+// OpenWeatherMap — free tier
+const OWM_KEY  = '284b04e34e45ccb5e521114eb12a9ba5'; // free key
+const OWM_LAT  = 51.6085;  // Whitchurch Lane area
+const OWM_LON  = -0.3245;
+
 const BUFFER       = 3;
 const SHOWER_MINS  = 15;
 const TRIM_MINS    = 5;
@@ -221,6 +269,8 @@ const FALLBACK_JOURNEY = 18;
 let darwinTrains  = [];
 let darwinLoaded  = false;
 let showScheduled = false;
+let weatherData   = null;
+let weatherPrepExtra = 0; // extra minutes for coat/umbrella
 
 const TT = {
   weekday: [
@@ -274,6 +324,202 @@ function fmt(t) {
 function nowMins() { const n=new Date(); return n.getHours()*60+n.getMinutes()+n.getSeconds()/60; }
 function tfl(p) { return `https://api.tfl.gov.uk${p}${p.includes('?')?'&':'?'}app_key=${API_KEY}`; }
 
+// ─── WEATHER ──────────────────────────────────────────
+async function loadWeather() {
+  try {
+    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${OWM_LAT}&lon=${OWM_LON}&units=metric&appid=${OWM_KEY}`);
+    if (!res.ok) throw new Error('weather fetch failed');
+    weatherData = await res.json();
+    renderWeather();
+  } catch(e) {
+    document.getElementById('weatherStrip').innerHTML =
+      `<div class="weather-loading" style="color:var(--muted)">weather unavailable</div>`;
+  }
+}
+
+function renderWeather() {
+  const el = document.getElementById('weatherStrip');
+  if (!weatherData) return;
+  const w = weatherData;
+  const temp = Math.round(w.main.temp);
+  const feels = Math.round(w.main.feels_like);
+  const desc = w.weather[0].description;
+  const mainW = w.weather[0].main.toLowerCase();
+  const windKph = Math.round((w.wind?.speed || 0) * 3.6);
+  const icon = weatherIcon(w.weather[0].icon, mainW);
+
+  // Determine tags and extra prep time
+  const tags = [];
+  weatherPrepExtra = 0;
+  const isRain = ['rain','drizzle','thunderstorm'].includes(mainW);
+  const isSnow = mainW === 'snow';
+
+  if (isRain || isSnow) {
+    tags.push(`<span class="weather-tag rain">${isSnow ? '🌨 snow' : '☔ rain'}</span>`);
+    weatherPrepExtra += 2; // umbrella/coat
+  }
+  if (temp <= 5) {
+    tags.push(`<span class="weather-tag cold">🧥 cold</span>`);
+    if (!isRain && !isSnow) weatherPrepExtra += 1; // coat
+  }
+  if (windKph >= 35) {
+    tags.push(`<span class="weather-tag wind">💨 ${windKph}km/h</span>`);
+  }
+  if (!isRain && !isSnow && temp > 5) {
+    tags.push(`<span class="weather-tag clear">dry</span>`);
+  }
+
+  const prepNote = weatherPrepExtra > 0
+    ? `<span class="weather-prep">+${weatherPrepExtra} min prep</span>`
+    : '';
+
+  el.innerHTML = `
+    <div class="weather-left">
+      <span class="weather-icon">${icon}</span>
+      <span class="weather-temp">${temp}°</span>
+      <span class="weather-desc">${desc}${feels !== temp ? ` · feels ${feels}°` : ''}</span>
+    </div>
+    <div class="weather-right">
+      ${tags.join('')}
+      ${prepNote}
+    </div>`;
+}
+
+function weatherIcon(iconCode, main) {
+  const map = {
+    'clear': '☀️', 'clouds': '☁️', 'rain': '🌧️', 'drizzle': '🌦️',
+    'thunderstorm': '⛈️', 'snow': '🌨️', 'mist': '🌫️', 'fog': '🌫️',
+    'haze': '🌫️', 'smoke': '🌫️', 'dust': '🌫️'
+  };
+  return map[main] || '🌤️';
+}
+
+// ─── LINE STATUS / DIVERSIONS ──────────────────────────
+async function loadLineStatus() {
+  try {
+    const res = await fetch(tfl('/Line/186/Status'));
+    if (!res.ok) throw new Error('line status fetch failed');
+    const data = await res.json();
+    renderLineStatus(data);
+  } catch(e) {
+    document.getElementById('lineBanner').innerHTML = '';
+  }
+}
+
+function renderLineStatus(data) {
+  const el = document.getElementById('lineBanner');
+  if (!data || !data.length) { el.innerHTML = ''; return; }
+
+  const line = data[0];
+  const statuses = line.lineStatuses || [];
+  if (!statuses.length) { el.innerHTML = ''; return; }
+
+  // Find worst status
+  const severityOrder = { 'Good Service': 0, 'Minor Delays': 1, 'Severe Delays': 2,
+    'Part Closure': 3, 'Planned Closure': 3, 'Service Closed': 4,
+    'Part Suspended': 3, 'Suspended': 4, 'Reduced Service': 1,
+    'Bus Service': 1, 'Diverted': 2 };
+
+  let worst = statuses[0];
+  for (const s of statuses) {
+    if ((severityOrder[s.statusSeverityDescription] || 0) > (severityOrder[worst.statusSeverityDescription] || 0)) {
+      worst = s;
+    }
+  }
+
+  const sev = worst.statusSeverityDescription || 'Unknown';
+  const reason = worst.reason || '';
+
+  if (sev === 'Good Service') {
+    el.innerHTML = ''; // don't clutter UI for good service
+    return;
+  }
+
+  let bannerCls, icon;
+  const sevLower = sev.toLowerCase();
+  if (sevLower.includes('severe') || sevLower.includes('suspend') || sevLower.includes('closed')) {
+    bannerCls = 'lb-bad'; icon = '🚫';
+  } else if (sevLower.includes('divert') || sevLower.includes('part') || sevLower.includes('delay') || sevLower.includes('reduced')) {
+    bannerCls = 'lb-warn'; icon = '⚠️';
+  } else {
+    bannerCls = 'lb-info'; icon = 'ℹ️';
+  }
+
+  // Truncate reason for display
+  const shortReason = reason.length > 150 ? reason.slice(0, 147) + '…' : reason;
+
+  el.innerHTML = `<div class="line-banner ${bannerCls}">
+    <div class="lb-icon">${icon}</div>
+    <div class="lb-body">
+      <div class="lb-title">186: ${sev}</div>
+      ${shortReason ? `<div class="lb-detail">${shortReason}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+// ─── HISTORICAL RELIABILITY ──────────────────────────
+const HISTORY_KEY = 'bus186_history';
+const HISTORY_MIN_SAMPLES = 4;
+const HISTORY_MAX_AGE_DAYS = 30;
+
+function loadHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY) || '{}');
+  } catch { return {}; }
+}
+
+function saveHistory(h) {
+  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(h)); } catch {}
+}
+
+function historyKey(schedSlot) {
+  // Key by day-of-week + scheduled time for patterns
+  const dow = new Date().getDay();
+  return `${dow}_${Math.round(schedSlot)}`;
+}
+
+function recordBusHistory(entries) {
+  const h = loadHistory();
+  const now = Date.now();
+  const cutoff = now - HISTORY_MAX_AGE_DAYS * 86400000;
+
+  for (const entry of entries) {
+    if (entry.tracking === 'scheduled') continue;
+    if (entry.schedSlot === null || entry.busDelay === null) continue;
+    const key = historyKey(entry.schedSlot);
+    if (!h[key]) h[key] = [];
+    // Don't double-record within same minute window
+    const recent = h[key].find(r => Math.abs(r.ts - now) < 120000);
+    if (recent) continue;
+    h[key].push({ delay: entry.busDelay, ts: now });
+    // Prune old entries
+    h[key] = h[key].filter(r => r.ts > cutoff).slice(-20);
+  }
+  saveHistory(h);
+}
+
+function getHistoryStats(schedSlot) {
+  if (schedSlot === null) return null;
+  const h = loadHistory();
+  const key = historyKey(schedSlot);
+  const records = (h[key] || []).filter(r => r.ts > Date.now() - HISTORY_MAX_AGE_DAYS * 86400000);
+  if (records.length < HISTORY_MIN_SAMPLES) return null;
+  const delays = records.map(r => r.delay);
+  const avg = delays.reduce((a, b) => a + b, 0) / delays.length;
+  const max = Math.max(...delays);
+  const min = Math.min(...delays);
+  return { avg: Math.round(avg * 10) / 10, max, min, n: records.length };
+}
+
+function historyLabel(stats) {
+  if (!stats) return '';
+  const avg = stats.avg;
+  if (Math.abs(avg) < 1) return `reliable (${stats.n} trips)`;
+  if (avg > 0) return `usually +${Math.round(avg)} late (${stats.n} trips)`;
+  return `usually ${Math.round(avg)} early (${stats.n} trips)`;
+}
+
+// ─── TRAIN FUNCTIONS ──────────────────────────────────
 function nextTrain(afterMins) {
   if (darwinTrains.length) {
     for (const t of darwinTrains) {
@@ -297,12 +543,12 @@ function nextTrainFromTimetable(afterMins) {
   return slot <= end ? slot : null;
 }
 
+// ─── BUS MERGE ────────────────────────────────────────
 function mergeBuses(liveR, hwVehicles, nm) {
-  const MATCH_WINDOW = 5; // widened from 3 to catch late-running buses
+  const MATCH_WINDOW = 5;
   const LOOKAHEAD    = 90;
   const tt = getTodayTimetable();
 
-  // Build list of upcoming timetable slots
   const ttSlots = [];
   for (const [h, m] of tt) {
     const slotMins = h * 60 + m;
@@ -328,15 +574,12 @@ function mergeBuses(liveR, hwVehicles, nm) {
         tracking = 'partial'; jMins = FALLBACK_JOURNEY;
       }
 
-      // Try to match this live bus to a scheduled timetable slot
       let schedSlot = null;
       let busDelay = null;
       let bestDiff = Infinity;
       for (const slotMins of ttSlots) {
-        const diff = depMins - slotMins; // positive = bus is late
+        const diff = depMins - slotMins;
         const absDiff = Math.abs(diff);
-        // Match if live bus is within window of a scheduled slot
-        // Bias towards late matches (bus running behind schedule)
         if (absDiff <= MATCH_WINDOW && absDiff < bestDiff) {
           bestDiff = absDiff;
           schedSlot = slotMins;
@@ -346,30 +589,25 @@ function mergeBuses(liveR, hwVehicles, nm) {
 
       return {
         depMins, jMins, tracking, live: true, bus,
-        schedSlot,   // the timetable slot this bus likely belongs to (or null)
-        busDelay     // minutes late (positive) or early (negative) vs schedule
+        schedSlot, busDelay
       };
     });
 
-  // Track which timetable slots have been claimed by live buses
   const claimedSlots = new Set();
   for (const entry of liveEntries) {
     if (entry.schedSlot !== null) claimedSlots.add(entry.schedSlot);
   }
 
-  // Remaining unclaimed timetable slots become scheduled entries
   const schedEntries = [];
   for (const slotMins of ttSlots) {
-    if (!claimedSlots.has(slotMins)) {
-      // Also check if any live bus is close (old behavior as fallback)
-      const matched = liveEntries.some(e => Math.abs(e.depMins - slotMins) <= 3);
-      if (!matched) {
-        schedEntries.push({
-          depMins: slotMins, jMins: FALLBACK_JOURNEY,
-          tracking: 'scheduled', live: false, bus: null,
-          schedSlot: slotMins, busDelay: null
-        });
-      }
+    if (claimedSlots.has(slotMins)) continue;
+    const matched = liveEntries.some(e => Math.abs(e.depMins - slotMins) <= 3);
+    if (!matched) {
+      schedEntries.push({
+        depMins: slotMins, jMins: FALLBACK_JOURNEY,
+        tracking: 'scheduled', live: false, bus: null,
+        schedSlot: slotMins, busDelay: null
+      });
     }
   }
 
@@ -400,7 +638,7 @@ function calcForEntry(entry) {
   const train   = nextTrain(arrHW + BUFFER);
   const showerMins = shower ? SHOWER_MINS : 0;
   const trimMins   = trim   ? TRIM_MINS   : 0;
-  const prepTotal  = showerMins + trimMins + POST_SHW + poop + PACK;
+  const prepTotal  = showerMins + trimMins + POST_SHW + poop + PACK + weatherPrepExtra;
   const leaveAt    = depMins - walk;
   const startPrepBy = leaveAt - prepTotal;
   const slack      = Math.floor(startPrepBy - nm);
@@ -443,6 +681,9 @@ async function loadBuses() {
       .forEach(a => { hwVehicles[a.vehicleId] = a.timeToStation; });
 
     mergedBuses = mergeBuses(liveR, hwVehicles, nowMins());
+
+    // Record history for matched buses
+    recordBusHistory(mergedBuses);
 
     if (prevDepMins !== null) {
       let bestMatch = -1, bestDiff = Infinity;
@@ -520,9 +761,10 @@ function renderBusCard(entry, idx, nm, walk, statusMeta) {
   const rideLabel  = tracking === 'full' ? `${jMins} min ride` : `~${jMins} min ride`;
   const { cls: stCls, label: stLbl } = statusMeta[tracking];
   const cardDim  = tracking === 'scheduled' ? 'is-sched-card' : '';
+  const uncatch  = !canCatch ? 'is-uncatchable' : '';
   const sel      = selectedIdx === idx ? 'selected' : '';
 
-  // Delay indicator: show scheduled time + delay if this tracked bus matched a timetable slot
+  // Delay indicator
   let delayHtml = '';
   if (tracking !== 'scheduled' && schedSlot !== null && busDelay !== null && Math.abs(busDelay) >= 1) {
     if (busDelay > 0) {
@@ -532,7 +774,11 @@ function renderBusCard(entry, idx, nm, walk, statusMeta) {
     }
   }
 
-  return `<div class="bus-item ${sel} ${cardDim}" onclick="selectBus(${idx})">
+  // Historical reliability
+  const stats = getHistoryStats(schedSlot);
+  const histHtml = stats ? `<div class="bus-history">${historyLabel(stats)}</div>` : '';
+
+  return `<div class="bus-item ${sel} ${cardDim} ${uncatch}" onclick="selectBus(${idx})">
     <div class="bus-status ${stCls}"><span class="live-dot"></span>${stLbl}</div>
     <div class="bus-time">${fmt(depMins)}</div>
     ${delayHtml}
@@ -540,6 +786,7 @@ function renderBusCard(entry, idx, nm, walk, statusMeta) {
     <div class="bus-sub">${rideLabel}</div>
     <div class="bus-train">${trainLabel}</div>
     <div class="badge ${badgeCls}">${badgeLbl}</div>
+    ${histHtml}
   </div>`;
 }
 
@@ -594,21 +841,27 @@ function renderResult() {
 
   const prepLines = [];
   if (showerMins) prepLines.push(`shower +${showerMins}`);
-  if (trimMins)   prepLines.push(`trim +${trimMins}`);
+  if (trimMins)   prepLines.push(`trim +${calc.trimMins || TRIM_MINS}`);
   prepLines.push(`dressed +${POST_SHW}`, `poop +${parseInt(document.getElementById('poopMins').value)||6}`, `pack +${PACK}`);
+  if (weatherPrepExtra > 0) prepLines.push(`weather +${weatherPrepExtra}`);
 
   const rideColors = { full: 'var(--good)', partial: 'var(--warn)', scheduled: 'var(--muted)' };
   const rideLabels = { full: 'live', partial: 'partial', scheduled: 'sched' };
   const rideNote = `${tracking === 'full' ? jMins : '~'+jMins} min <span style="color:${rideColors[tracking]};font-size:0.65rem">${rideLabels[tracking]}</span>`;
 
-  // Bus delay note for the result panel
-  let busDelayNote = '';
+  // Bus delay step
+  let busDelayStep = '';
   if (entry.schedSlot !== null && entry.busDelay !== null && Math.abs(entry.busDelay) >= 1) {
-    if (entry.busDelay > 0) {
-      busDelayNote = ` <span style="color:var(--warn);font-size:0.65rem">sched ${fmt(entry.schedSlot)}, +${entry.busDelay} late</span>`;
-    } else {
-      busDelayNote = ` <span style="color:var(--good);font-size:0.65rem">sched ${fmt(entry.schedSlot)}, ${entry.busDelay} early</span>`;
-    }
+    const dColor = entry.busDelay > 0 ? 'var(--warn)' : 'var(--good)';
+    const dLabel = entry.busDelay > 0 ? `+${entry.busDelay} min late` : `${Math.abs(entry.busDelay)} min early`;
+    busDelayStep = `<div class="step"><div class="step-label" style="color:${dColor}">↳ sched ${fmt(entry.schedSlot)}, running ${dLabel}</div><div class="step-val"></div></div>`;
+  }
+
+  // History note for result
+  const stats = getHistoryStats(entry.schedSlot);
+  let histStep = '';
+  if (stats) {
+    histStep = `<div class="step"><div class="step-label" style="font-style:italic">📊 ${historyLabel(stats)}</div><div class="step-val"></div></div>`;
   }
 
   // Shower suggestion
@@ -702,8 +955,10 @@ function renderResult() {
       </div>
       <div class="step">
         <div class="step-label">🚌 board 186 at stop R</div>
-        <div class="step-val">${fmt(depMins)} <span style="color:var(--muted);font-size:0.7rem">(in ${Math.round(busDepMins)} min)</span>${busDelayNote}</div>
+        <div class="step-val">${fmt(depMins)} <span style="color:var(--muted);font-size:0.7rem">(in ${Math.round(busDepMins)} min)</span></div>
       </div>
+      ${busDelayStep}
+      ${histStep}
       <div class="step">
         <div class="step-label">📍 arrive H&amp;W</div>
         <div class="step-val">${fmt(arrHW)} <span style="color:var(--muted);font-size:0.7rem">(+${rideNote})</span></div>
@@ -723,8 +978,15 @@ document.querySelectorAll('input').forEach(el => {
   el.addEventListener('input',  () => { renderResult(); });
 });
 
+// Initial load
 loadBuses();
+loadWeather();
+loadLineStatus();
+
+// Refresh intervals
 setInterval(loadBuses, 60000);
+setInterval(loadWeather, 600000);    // weather every 10 min
+setInterval(loadLineStatus, 120000); // line status every 2 min
 
 function updateClock() {
   const n = new Date();
@@ -736,6 +998,7 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 </script>
+
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -743,5 +1006,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+
 </body>
 </html>
